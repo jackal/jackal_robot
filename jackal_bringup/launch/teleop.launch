@@ -24,6 +24,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 -->
 <launch>
   <arg name="mode" default="$(optenv JACKAL_TELEOP_MODE simple)" />
+
+  <!-- Place this instance of the teleop launcher in a namespace so that the user can launch a separate
+       one of them bare from a workstation and not kill this one due to name collisions. -->
   <group ns="bluetooth_teleop">
     <remap from="cmd_vel" to="/cmd_vel" />
     <remap from="cmd_drive" to="/cmd_drive" />
