@@ -10,3 +10,4 @@ install(DIRECTORY launch
 )
 
 roslaunch_add_file_check(launch/mcu.launch)
+roslaunch_add_file_check(launch/teleop.launch)
