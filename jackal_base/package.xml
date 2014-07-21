@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>jackal_bringup</name>
+  <name>jackal_base</name>
   <version>0.0.0</version>
-  <description>Launchfiles and scripts for bringing up Jackal's robot software.</description>
+  <description>Nodes and launchfiles for Jackal's base equipment.</description>
 
   <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
 
@@ -11,12 +11,17 @@
   <url type="website">http://wiki.ros.org/Robots/Jackal</url>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>hardware_interface</build_depend>
   <build_depend>roslaunch</build_depend>
+  <build_depend>rosserial_server</build_depend>
+  <build_depend>teleop_twist_joy</build_depend>
 
+  <run_depend>controller_manager</run_depend>
   <run_depend>jackal_msgs</run_depend>
   <run_depend>nmea_navsat_driver</run_depend>
   <run_depend>rosserial_python</run_depend>
   <run_depend>rosserial_server</run_depend>
+  <run_depend>teleop_twist_joy</run_depend>
 
   <export>
   </export>
