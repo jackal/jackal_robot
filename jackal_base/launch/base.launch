@@ -1,20 +1,22 @@
 <launch>
-  <include file="$(find jackal_description)/launch/description.launch" />
   <arg name="joy_dev" default="/dev/input/js0" />
 
-  <node pkg="joy" type="joy_node" name="joy_node">
-    <param name="dev" value="$(arg joy_dev)" />
-    <param name="deadzone" value="0.3" />
-    <param name="autorepeat_rate" value="20" />
-  </node>
-
+  <include file="$(find jackal_description)/launch/description.launch" />
   <rosparam command="load" file="$(find jackal_base)/config/base.yaml" />
-  <node pkg="jackal_base" type="jackal_node" name="jackal_node">
-    <remap from="jackal_velocity_controller/odom" to="odom" />
-    <remap from="jackal_velocity_controller/cmd_vel" to="cmd_vel" />
-  </node>
+
+  <node pkg="jackal_base" type="jackal_node" name="jackal_node" />
 
   <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="jackal_velocity_controller" />
+
+  <group ns="navsat">
+    <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" />
+  </group>
+  
+  <group ns="bluetooth_teleop">
+    <node pkg="joy" type="joy_node" name="joy_node">
+      <param name="dev" value="$(arg joy_dev)" />
+    </node>
+  </group>
 </launch>

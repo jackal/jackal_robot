@@ -163,7 +163,6 @@ int main(int argc, char* argv[])
 {
   // Initialize ROS node.
   ros::init(argc, argv, "jackal_node");
-  ros::NodeHandle nh;
   JackalRobot jackal;
 
   // Create the serial rosserial server in a background ASIO event loop.
@@ -175,13 +174,20 @@ int main(int argc, char* argv[])
   boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
 
   // Background thread for the controls callback.
+  ros::M_string controller_remaps;
+  controller_remaps.insert(ros::StringPair("jackal_velocity_controller/odom", "odom"));
+  controller_remaps.insert(ros::StringPair("jackal_velocity_controller/cmd_vel", "cmd_vel"));
+  ros::NodeHandle controller_nh("", controller_remaps);
   int publish_rate;
   ros::param::param<int>("jackal_velocity_controller/publish_rate", publish_rate, 50.0);
-  controller_manager::ControllerManager cm(&jackal, nh);
+  controller_manager::ControllerManager cm(&jackal, controller_nh);
   boost::thread(boost::bind(controlThread, ros::Rate(50), &jackal, &cm));
 
   // Generic twist teleop.
-  teleop_twist_joy::TeleopTwistJoy teleop_joy(&nh);
+  ros::M_string teleop_remaps;
+  teleop_remaps.insert(ros::StringPair("cmd_vel", "/cmd_vel"));
+  ros::NodeHandle teleop_nh("bluetooth_teleop", teleop_remaps);
+  teleop_twist_joy::TeleopTwistJoy teleop_joy(&teleop_nh, &teleop_nh);
 
   // Foreground ROS spinner for ROS callbacks, including rosserial, joy teleop.
   ros::spin();
