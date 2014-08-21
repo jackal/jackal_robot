@@ -9,6 +9,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(jackal_node src/jackal_base)
 target_link_libraries(jackal_node ${catkin_LIBRARIES})
+add_dependencies(jackal_node jackal_msgs_gencpp rosserial_msgs_gencpp)
 
 install(DIRECTORY launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
