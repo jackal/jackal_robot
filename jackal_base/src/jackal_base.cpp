@@ -103,6 +103,8 @@ public:
         joint_state_msg_.effort[i] = 0;  // TODO
       }
 
+      joint_state_msg_.header.seq++;
+      joint_state_msg_.header.stamp = feedback_msg_->header.stamp;
       joint_state_pub_.publish(joint_state_msg_);
     }
   }
