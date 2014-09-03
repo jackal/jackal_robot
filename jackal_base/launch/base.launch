@@ -4,38 +4,19 @@
   <include file="$(find jackal_description)/launch/description.launch" />
   <rosparam command="load" file="$(find jackal_base)/config/base.yaml" />
 
-  <node pkg="jackal_base" type="jackal_node" name="jackal_node">
-    <remap from="odom" to="odometry/encoders" />
-  </node>
+  <node pkg="jackal_base" type="jackal_node" name="jackal_node" />
 
   <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="jackal_velocity_controller" />
 
-  <group ns="navsat">
-    <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" />
-  </group>
+  <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" ns="navsat" />
 
-  <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_node">
-    <param name="use_mag" value="false" />
-    <param name="publish_tf" value="false" />
-  </node>
+  <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter" />
 
-  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
-    <rosparam>
-      frequency: 50
-      odom0: /odometry/encoders
-      odom0_config: [false, false, false, false, false, false, true, false, true, false, false, false]
-      imu0: /imu/data
-      imu0_config: [true, true, true, true, true, true, true, true, true, true, true, true]
-      odom_frame: odom
-      base_link_frame: base_link
-    </rosparam>
-  </node>
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" />
   
-  <group ns="bluetooth_teleop">
-    <node pkg="joy" type="joy_node" name="joy_node">
-      <param name="dev" value="$(arg joy_dev)" />
-    </node>
-  </group>
+  <node pkg="joy" type="joy_node" name="joy_node" ns="bluetooth_teleop">
+    <param name="dev" value="$(arg joy_dev)" />
+  </node>
 </launch>

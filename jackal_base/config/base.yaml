@@ -47,3 +47,19 @@ jackal_velocity_controller:
       max_velocity           : 4.0   # rad/s
       has_acceleration_limits: true
       max_acceleration       : 25.0   # rad/s^2
+
+imu_filter:
+  gain: 0.005
+  use_mag: false
+  publish_tf: false
+
+ekf_localization:
+  frequency: 50
+  odom0: /odom
+  odom0_config: [false, false, false, false, false, false, true, false, false, false, false, true]
+  imu0: /imu/data
+  imu0_config: [false, false, false, true, true, true, true, true, true, true, true, true]
+  odom_frame: odom
+  base_link_frame: base_link
+
+
