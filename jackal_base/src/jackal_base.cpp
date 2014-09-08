@@ -175,13 +175,7 @@ int main(int argc, char* argv[])
   boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
 
   // Background thread for the controls callback.
-  ros::M_string controller_remaps;
-  controller_remaps.insert(ros::StringPair("jackal_velocity_controller/odom", "odometry/encoders"));
-  controller_remaps.insert(ros::StringPair("jackal_velocity_controller/cmd_vel", "cmd_vel"));
-
-  ros::NodeHandle controller_nh("", controller_remaps);
-  int publish_rate;
-  ros::param::param<int>("jackal_velocity_controller/publish_rate", publish_rate, 50.0);
+  ros::NodeHandle controller_nh("");
   controller_manager::ControllerManager cm(&jackal, controller_nh);
   boost::thread(boost::bind(controlThread, ros::Rate(50), &jackal, &cm));
 
