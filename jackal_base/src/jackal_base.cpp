@@ -54,31 +54,23 @@ class JackalRobot : public hardware_interface::RobotHW
 public:
   JackalRobot()
   {
-    joint_state_msg_.name.resize(4);
-    joint_state_msg_.position.resize(4);
-    joint_state_msg_.velocity.resize(4);
-    joint_state_msg_.effort.resize(4);
-    joint_state_msg_.name = boost::assign::list_of("front_left_wheel_joint")
-        ("front_right_wheel_joint")("rear_left_wheel_joint")("rear_right_wheel_joint");
+    std::vector<std::string> joint_names = boost::assign::list_of("front_left_wheel")
+        ("front_right_wheel")("rear_left_wheel")("rear_right_wheel");
 
-    for (unsigned int i = 0; i < joint_state_msg_.name.size(); i++) {
-      hardware_interface::JointStateHandle joint_state_handle(joint_state_msg_.name[i],
-          &joint_state_msg_.position[i], &joint_state_msg_.velocity[i], &joint_state_msg_.effort[i]);
+    for (unsigned int i = 0; i < joint_names.size(); i++) {
+      hardware_interface::JointStateHandle joint_state_handle(joint_names[i],
+          &joints_[i].position, &joints_[i].velocity, &joints_[i].effort);
       joint_state_interface_.registerHandle(joint_state_handle);
+
+      hardware_interface::JointHandle joint_handle(
+          joint_state_handle, &joints_[i].velocity_command);
+      velocity_joint_interface_.registerHandle(joint_handle);
     }
     registerInterface(&joint_state_interface_);
-
-    hardware_interface::JointHandle left_velocity_handle(
-        joint_state_interface_.getHandle("front_left_wheel_joint"), &drive_commands_[jackal_msgs::Drive::LEFT]);
-    velocity_joint_interface_.registerHandle(left_velocity_handle);
-    hardware_interface::JointHandle right_velocity_handle(
-        joint_state_interface_.getHandle("front_right_wheel_joint"), &drive_commands_[jackal_msgs::Drive::RIGHT]);
-    velocity_joint_interface_.registerHandle(right_velocity_handle);
     registerInterface(&velocity_joint_interface_);
 
     feedback_sub_ = nh_.subscribe("feedback", 1, &JackalRobot::feedbackCallback, this);
     cmd_drive_pub_ = nh_.advertise<jackal_msgs::Drive>("cmd_drive", 1);
-    joint_state_pub_ = nh_.advertise<sensor_msgs::JointState>("/joint_states", 1);
   }
 
   /**
@@ -87,7 +79,7 @@ public:
    *
    * Called from the controller thread.
    */
-  void publishJointStateFromHardware()
+  void copyJointsFromHardware()
   {
     if (feedback_msg_)
     {
@@ -97,14 +89,10 @@ public:
 
       for (int i = 0; i < 4; i++)
       {
-        joint_state_msg_.position[i] = msg->drivers[i % 2].measured_travel;
-        joint_state_msg_.velocity[i] = msg->drivers[i % 2].measured_velocity;
-        joint_state_msg_.effort[i] = 0;  // TODO
+        joints_[i].position = msg->drivers[i % 2].measured_travel;
+        joints_[i].velocity = msg->drivers[i % 2].measured_velocity;
+        joints_[i].effort = 0;  // TODO
       }
-
-      joint_state_msg_.header.seq++;
-      joint_state_msg_.header.stamp = feedback_msg_->header.stamp;
-      joint_state_pub_.publish(joint_state_msg_);
     }
   }
 
@@ -117,8 +105,8 @@ public:
   {
     jackal_msgs::Drive drive_msg;
     drive_msg.mode = jackal_msgs::Drive::MODE_VELOCITY;
-    drive_msg.drivers[jackal_msgs::Drive::LEFT] = drive_commands_[jackal_msgs::Drive::LEFT];
-    drive_msg.drivers[jackal_msgs::Drive::RIGHT] = drive_commands_[jackal_msgs::Drive::RIGHT];
+    drive_msg.drivers[jackal_msgs::Drive::LEFT] = joints_[0].velocity_command;
+    drive_msg.drivers[jackal_msgs::Drive::RIGHT] = joints_[1].velocity_command;
     cmd_drive_pub_.publish(drive_msg);
   }
 
@@ -132,14 +120,17 @@ private:
   ros::NodeHandle nh_;
   ros::Subscriber feedback_sub_;
   ros::Publisher cmd_drive_pub_;
-  ros::Publisher joint_state_pub_;
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::VelocityJointInterface velocity_joint_interface_;
 
   // These are mutated on the controls thread only.
-  double drive_commands_[2];
-  sensor_msgs::JointState joint_state_msg_;
+  struct {
+    double position;
+    double velocity;
+    double effort;
+    double velocity_command;
+  } joints_[4];
 
   // This pointer is set from the ROS thread.
   jackal_msgs::Feedback::ConstPtr feedback_msg_;
@@ -152,7 +143,7 @@ void controlThread(ros::Rate rate, JackalRobot* robot, controller_manager::Contr
   while(1)
   {
     ros::Time this_time = ros::Time::now();
-    robot->publishJointStateFromHardware();
+    robot->copyJointsFromHardware();
     cm->update(this_time, this_time - last_time);
     robot->publishDriveFromController();
     last_time = this_time;
