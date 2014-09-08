@@ -31,8 +31,8 @@
   </node>
 
   <!-- Differential controller and basic localization -->
-  <include file="${find jackal_control)/launch/control.launch" />
+  <include file="$(find jackal_control)/launch/control.launch" />
 
   <!-- Teleoperation via joystick and rviz interactive markers -->
-  <include file="${find jackal_control)/launch/teleop.launch" />
+  <include file="$(find jackal_control)/launch/teleop.launch" />
 </launch>
