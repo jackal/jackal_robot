@@ -32,6 +32,7 @@
  */
 
 #include <iostream>
+#include <string>
 #include <boost/asio.hpp>
 #include <boost/assign.hpp>
 
@@ -54,7 +55,7 @@ class JackalRobot : public hardware_interface::RobotHW
 public:
   JackalRobot()
   {
-    std::vector<std::string> joint_names = boost::assign::list_of("front_left_wheel")
+    ros::V_string joint_names = boost::assign::list_of("front_left_wheel")
         ("front_right_wheel")("rear_left_wheel")("rear_right_wheel");
 
     for (unsigned int i = 0; i < joint_names.size(); i++) {
@@ -91,7 +92,7 @@ public:
       {
         joints_[i].position = msg->drivers[i % 2].measured_travel;
         joints_[i].velocity = msg->drivers[i % 2].measured_velocity;
-        joints_[i].effort = 0;  // TODO
+        joints_[i].effort = 0;  // TODO(mikepurvis): determine this from current data.
       }
     }
   }
@@ -125,12 +126,14 @@ private:
   hardware_interface::VelocityJointInterface velocity_joint_interface_;
 
   // These are mutated on the controls thread only.
-  struct {
+  struct
+  {
     double position;
     double velocity;
     double effort;
     double velocity_command;
-  } joints_[4];
+  }
+  joints_[4];
 
   // This pointer is set from the ROS thread.
   jackal_msgs::Feedback::ConstPtr feedback_msg_;
@@ -140,7 +143,7 @@ void controlThread(ros::Rate rate, JackalRobot* robot, controller_manager::Contr
 {
   ros::Time last_time;
 
-  while(1)
+  while (1)
   {
     ros::Time this_time = ros::Time::now();
     robot->copyJointsFromHardware();
@@ -158,11 +161,10 @@ int main(int argc, char* argv[])
   JackalRobot jackal;
 
   // Create the serial rosserial server in a background ASIO event loop.
-  int baud = 115200;  //< This is a dummy, since the USB-ACM connection negotiates its own rate.
   std::string port;
   ros::param::param<std::string>("~port", port, "/dev/jackal");
   boost::asio::io_service io_service;
-  new rosserial_server::SerialSession(io_service, port, baud);
+  new rosserial_server::SerialSession(io_service, port, 115200);
   boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
 
   // Background thread for the controls callback.

@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(jackal_base)
 
-find_package(catkin REQUIRED COMPONENTS controller_manager hardware_interface roscpp roslaunch rosserial_server sensor_msgs teleop_twist_joy)
+find_package(catkin REQUIRED COMPONENTS
+  controller_manager hardware_interface roscpp roslaunch
+  roslint rosserial_server sensor_msgs teleop_twist_joy)
 find_package(Boost)
 
 catkin_package()
@@ -33,3 +35,5 @@ install(DIRECTORY launch
 )
 
 roslaunch_add_file_check(launch/base.launch)
+roslint_cpp()
+roslint_add_test()
