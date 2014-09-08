@@ -40,7 +40,6 @@
 #include "jackal_msgs/Drive.h"
 #include "jackal_msgs/Feedback.h"
 #include "sensor_msgs/JointState.h"
-#include "teleop_twist_joy/teleop_twist_joy.h"
 
 #include "rosserial_server/serial_session.h"
 
@@ -177,19 +176,14 @@ int main(int argc, char* argv[])
 
   // Background thread for the controls callback.
   ros::M_string controller_remaps;
-  controller_remaps.insert(ros::StringPair("jackal_velocity_controller/odom", "odom"));
+  controller_remaps.insert(ros::StringPair("jackal_velocity_controller/odom", "odometry/encoders"));
   controller_remaps.insert(ros::StringPair("jackal_velocity_controller/cmd_vel", "cmd_vel"));
+
   ros::NodeHandle controller_nh("", controller_remaps);
   int publish_rate;
   ros::param::param<int>("jackal_velocity_controller/publish_rate", publish_rate, 50.0);
   controller_manager::ControllerManager cm(&jackal, controller_nh);
   boost::thread(boost::bind(controlThread, ros::Rate(50), &jackal, &cm));
-
-  // Generic twist teleop.
-  ros::M_string teleop_remaps;
-  teleop_remaps.insert(ros::StringPair("cmd_vel", "/cmd_vel"));
-  ros::NodeHandle teleop_nh("bluetooth_teleop", teleop_remaps);
-  teleop_twist_joy::TeleopTwistJoy teleop_joy(&teleop_nh, &teleop_nh);
 
   // Foreground ROS spinner for ROS callbacks, including rosserial, joy teleop.
   ros::spin();

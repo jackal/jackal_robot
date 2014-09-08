@@ -1,22 +1,38 @@
 <launch>
-  <arg name="joy_dev" default="/dev/input/js0" />
-
   <include file="$(find jackal_description)/launch/description.launch" />
-  <rosparam command="load" file="$(find jackal_base)/config/base.yaml" />
+  
+  <node pkg="jackal_base" type="jackal_node" name="jackal_node">
+    <rosparam>
+      # TODO: Specify these in code rather than here.
+      require:
+        publishers:
+          - status
+          - feedback
+          - imu/data_raw
+          - navsat/nmea_sentence
+        subscribers:
+          - cmd_drive
+    </rosparam>
+  </node>
 
-  <node pkg="jackal_base" type="jackal_node" name="jackal_node" />
-
+  <!-- TODO: Eliminate this by compiling the necessary message definitions into jackal_base. -->
   <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-        args="jackal_velocity_controller" />
 
+  <!-- Translate NMEASentence messages from the MCU to NavSatFix messages -->
   <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" ns="navsat" />
 
-  <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter" />
-
-  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" />
-  
-  <node pkg="joy" type="joy_node" name="joy_node" ns="bluetooth_teleop">
-    <param name="dev" value="$(arg joy_dev)" />
+  <!-- Filter raw gyro data into a usable IMU message -->
+  <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter">
+    <rosparam>
+      gain: 0.005
+      use_mag: false
+      publish_tf: false
+    </rosparam>
   </node>
+
+  <!-- Differential controller and basic localization -->
+  <include file="${find jackal_control)/launch/control.launch" />
+
+  <!-- Teleoperation via joystick and rviz interactive markers -->
+  <include file="${find jackal_control)/launch/teleop.launch" />
 </launch>

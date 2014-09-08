@@ -14,7 +14,6 @@
   <build_depend>hardware_interface</build_depend>
   <build_depend>roslaunch</build_depend>
   <build_depend>rosserial_server</build_depend>
-  <build_depend>teleop_twist_joy</build_depend>
 
   <run_depend>controller_manager</run_depend>
   <run_depend>diff_drive_controller</run_depend>
