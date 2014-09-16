@@ -10,7 +10,7 @@ catkin_package()
 
 include_directories(include ${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS})
 
-add_executable(jackal_node src/jackal_base)
+add_executable(jackal_node src/jackal_base src/jackal_hardware)
 target_link_libraries(jackal_node ${catkin_LIBRARIES})
 add_dependencies(jackal_node jackal_msgs_gencpp rosserial_msgs_gencpp)
 

@@ -1,7 +1,7 @@
 /**
  *
  *  \file
- *  \brief      Main entry point for jackal base.
+ *  \brief      Class representing Jackal hardware
  *  \author     Mike Purvis <mpurvis@clearpathrobotics.com>
  *  \copyright  Copyright (c) 2013, Clearpath Robotics, Inc.
  *
@@ -31,51 +31,52 @@
  *
  */
 
-#include <string>
-#include <boost/asio/io_service.hpp>
-#include <boost/thread.hpp>
+#ifndef JACKAL_BASE_JACKAL_HARDWARE_H
+#define JACKAL_BASE_JACKAL_HARDWARE_H
 
-#include "controller_manager/controller_manager.h"
-#include "jackal_base/jackal_hardware.h"
 #include "ros/ros.h"
-#include "rosserial_server/serial_session.h"
+#include "jackal_msgs/Feedback.h"
+#include "sensor_msgs/JointState.h"
+#include "hardware_interface/joint_state_interface.h"
+#include "hardware_interface/joint_command_interface.h"
+
+#include "hardware_interface/robot_hw.h"
 
 
-void controlThread(ros::Rate rate, jackal_base::JackalHardware* robot, controller_manager::ControllerManager* cm)
+namespace jackal_base
 {
-  ros::Time last_time;
 
-  while (1)
+class JackalHardware : public hardware_interface::RobotHW
+{
+public:
+  JackalHardware();
+  void copyJointsFromHardware();
+  void publishDriveFromController();
+
+private:
+  void feedbackCallback(const jackal_msgs::Feedback::ConstPtr& msg);
+
+  ros::NodeHandle nh_;
+  ros::Subscriber feedback_sub_;
+  ros::Publisher cmd_drive_pub_;
+
+  hardware_interface::JointStateInterface joint_state_interface_;
+  hardware_interface::VelocityJointInterface velocity_joint_interface_;
+
+  // These are mutated on the controls thread only.
+  struct
   {
-    ros::Time this_time = ros::Time::now();
-    robot->copyJointsFromHardware();
-    cm->update(this_time, this_time - last_time);
-    robot->publishDriveFromController();
-    last_time = this_time;
-    rate.sleep();
+    double position;
+    double velocity;
+    double effort;
+    double velocity_command;
   }
-}
+  joints_[4];
 
-int main(int argc, char* argv[])
-{
-  // Initialize ROS node.
-  ros::init(argc, argv, "jackal_node");
-  jackal_base::JackalHardware jackal;
+  // This pointer is set from the ROS thread.
+  jackal_msgs::Feedback::ConstPtr feedback_msg_;
+};
 
-  // Create the serial rosserial server in a background ASIO event loop.
-  std::string port;
-  ros::param::param<std::string>("~port", port, "/dev/jackal");
-  boost::asio::io_service io_service;
-  new rosserial_server::SerialSession(io_service, port, 115200);
-  boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
+}  // namespace jackal_base
 
-  // Background thread for the controls callback.
-  ros::NodeHandle controller_nh("");
-  controller_manager::ControllerManager cm(&jackal, controller_nh);
-  boost::thread(boost::bind(controlThread, ros::Rate(50), &jackal, &cm));
-
-  // Foreground ROS spinner for ROS callbacks, including rosserial, joy teleop.
-  ros::spin();
-
-  return 0;
-}
+#endif  // JACKAL_BASE_JACKAL_HARDWARE_H
