@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(jackal_base)
 
 find_package(catkin REQUIRED COMPONENTS
-  controller_manager hardware_interface roscpp roslaunch
+  controller_manager hardware_interface jackal_msgs roscpp roslaunch
   roslint rosserial_server sensor_msgs teleop_twist_joy)
 find_package(Boost)
 

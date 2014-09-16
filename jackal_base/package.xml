@@ -12,6 +12,8 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>hardware_interface</build_depend>
+  <build_depend>jackal_msgs</build_depend>
+  <build_depend>realtime_tools</build_depend>
   <build_depend>roslaunch</build_depend>
   <build_depend>roslint</build_depend>
   <build_depend>rosserial_server</build_depend>
@@ -20,6 +22,7 @@
   <run_depend>diff_drive_controller</run_depend>
   <run_depend>jackal_msgs</run_depend>
   <run_depend>nmea_navsat_driver</run_depend>
+  <run_depend>realtime_tools</run_depend>
   <run_depend>rosserial_python</run_depend>
   <run_depend>rosserial_server</run_depend>
   <run_depend>teleop_twist_joy</run_depend>

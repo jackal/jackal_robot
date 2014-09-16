@@ -34,8 +34,10 @@
 #ifndef JACKAL_BASE_JACKAL_HARDWARE_H
 #define JACKAL_BASE_JACKAL_HARDWARE_H
 
-#include "ros/ros.h"
+#include "jackal_msgs/Drive.h"
 #include "jackal_msgs/Feedback.h"
+#include "realtime_tools/realtime_publisher.h"
+#include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
 #include "hardware_interface/joint_state_interface.h"
 #include "hardware_interface/joint_command_interface.h"
@@ -58,7 +60,7 @@ private:
 
   ros::NodeHandle nh_;
   ros::Subscriber feedback_sub_;
-  ros::Publisher cmd_drive_pub_;
+  realtime_tools::RealtimePublisher<jackal_msgs::Drive> cmd_drive_pub_;
 
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::VelocityJointInterface velocity_joint_interface_;

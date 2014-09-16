@@ -32,9 +32,7 @@
  */
 
 #include <boost/assign.hpp>
-
 #include "jackal_base/jackal_hardware.h"
-#include "jackal_msgs/Drive.h"
 
 namespace jackal_base
 {
@@ -57,7 +55,9 @@ JackalHardware::JackalHardware()
   registerInterface(&velocity_joint_interface_);
 
   feedback_sub_ = nh_.subscribe("feedback", 1, &JackalHardware::feedbackCallback, this);
-  cmd_drive_pub_ = nh_.advertise<jackal_msgs::Drive>("cmd_drive", 1);
+
+  // Realtime publisher, initializes differently from regular ros::Publisher
+  cmd_drive_pub_.init(nh_, "cmd_drive", 1);
 }
 
 /**
@@ -90,11 +90,12 @@ void JackalHardware::copyJointsFromHardware()
  */
 void JackalHardware::publishDriveFromController()
 {
-  jackal_msgs::Drive drive_msg;
-  drive_msg.mode = jackal_msgs::Drive::MODE_VELOCITY;
-  drive_msg.drivers[jackal_msgs::Drive::LEFT] = joints_[0].velocity_command;
-  drive_msg.drivers[jackal_msgs::Drive::RIGHT] = joints_[1].velocity_command;
-  cmd_drive_pub_.publish(drive_msg);
+  if (cmd_drive_pub_.trylock()){
+    cmd_drive_pub_.msg_.mode = jackal_msgs::Drive::MODE_VELOCITY;
+    cmd_drive_pub_.msg_.drivers[jackal_msgs::Drive::LEFT] = joints_[0].velocity_command;
+    cmd_drive_pub_.msg_.drivers[jackal_msgs::Drive::RIGHT] = joints_[1].velocity_command;
+    cmd_drive_pub_.unlockAndPublish();
+  }
 }
 
 void JackalHardware::feedbackCallback(const jackal_msgs::Feedback::ConstPtr& msg)
