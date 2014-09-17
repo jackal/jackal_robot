@@ -3,12 +3,12 @@ project(jackal_base)
 
 find_package(catkin REQUIRED COMPONENTS
   controller_manager diagnostic_updater hardware_interface jackal_msgs roscpp roslaunch
-  roslint rosserial_server sensor_msgs teleop_twist_joy)
+  roslint rosserial_server sensor_msgs teleop_twist_joy topic_tools)
 find_package(Boost)
 
 catkin_package()
 
-include_directories(include ${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS})
+include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 
 add_executable(jackal_node src/jackal_base src/jackal_hardware src/jackal_diagnostic_updater)
 target_link_libraries(jackal_node ${catkin_LIBRARIES})

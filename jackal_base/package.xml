@@ -20,10 +20,12 @@
   <build_depend>roslint</build_depend>
   <build_depend>rosserial_server</build_depend>
   <build_depend>sensor_msgs</build_depend>
+  <build_depend>topic_tools</build_depend>
 
   <run_depend>controller_manager</run_depend>
   <run_depend>diagnostic_updater</run_depend>
   <run_depend>diff_drive_controller</run_depend>
+  <run_depend>imu_filter_madgwick</run_depend>
   <run_depend>jackal_msgs</run_depend>
   <run_depend>nmea_msgs</run_depend>
   <run_depend>nmea_navsat_driver</run_depend>
@@ -32,6 +34,7 @@
   <run_depend>rosserial_server</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>teleop_twist_joy</run_depend>
+  <run_depend>topic_tools</run_depend>
 
   <export>
   </export>
