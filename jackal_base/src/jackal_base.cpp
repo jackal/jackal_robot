@@ -36,6 +36,7 @@
 #include <boost/thread.hpp>
 
 #include "controller_manager/controller_manager.h"
+#include "jackal_base/jackal_diagnostic_updater.h"
 #include "jackal_base/jackal_hardware.h"
 #include "ros/ros.h"
 #include "rosserial_server/serial_session.h"
@@ -74,7 +75,10 @@ int main(int argc, char* argv[])
   controller_manager::ControllerManager cm(&jackal, controller_nh);
   boost::thread(boost::bind(controlThread, ros::Rate(50), &jackal, &cm));
 
-  // Foreground ROS spinner for ROS callbacks, including rosserial, joy teleop.
+  // Create diagnostic updater, to update itself on the ROS thread.
+  jackal_base::JackalDiagnosticUpdater jackal_diagnostic_updater;
+
+  // Foreground ROS spinner for ROS callbacks, including rosserial, diagnostics
   ros::spin();
 
   return 0;
