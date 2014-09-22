@@ -66,12 +66,16 @@ private:
   hardware_interface::VelocityJointInterface velocity_joint_interface_;
 
   // These are mutated on the controls thread only.
-  struct
+  struct Joint
   {
     double position;
     double velocity;
     double effort;
     double velocity_command;
+
+    Joint() : position(0), velocity(0), effort(0), velocity_command(0)
+    {
+    }
   }
   joints_[4];
 
