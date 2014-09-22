@@ -1,6 +1,6 @@
 analyzers:
   jackal:
-    type: AnalyzerGroup
+    type: diagnostic_aggregator/AnalyzerGroup
     path: Jackal Base
     analyzers:
       general:
