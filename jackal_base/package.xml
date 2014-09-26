@@ -5,6 +5,7 @@
   <description>Nodes and launchfiles for Jackal's base equipment.</description>
 
   <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
+  <author email="mpurvis@clearpathrobotics.com">Mike Purvis</author>
 
   <license>BSD</license>
 
