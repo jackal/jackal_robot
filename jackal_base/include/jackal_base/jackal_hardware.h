@@ -34,15 +34,15 @@
 #ifndef JACKAL_BASE_JACKAL_HARDWARE_H
 #define JACKAL_BASE_JACKAL_HARDWARE_H
 
+#include "boost/thread.hpp"
+#include "hardware_interface/joint_state_interface.h"
+#include "hardware_interface/joint_command_interface.h"
+#include "hardware_interface/robot_hw.h"
 #include "jackal_msgs/Drive.h"
 #include "jackal_msgs/Feedback.h"
 #include "realtime_tools/realtime_publisher.h"
 #include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
-#include "hardware_interface/joint_state_interface.h"
-#include "hardware_interface/joint_command_interface.h"
-
-#include "hardware_interface/robot_hw.h"
 
 
 namespace jackal_base
@@ -81,6 +81,7 @@ private:
 
   // This pointer is set from the ROS thread.
   jackal_msgs::Feedback::ConstPtr feedback_msg_;
+  boost::mutex feedback_msg_mutex_;
 };
 
 }  // namespace jackal_base

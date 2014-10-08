@@ -68,16 +68,13 @@ JackalHardware::JackalHardware()
  */
 void JackalHardware::copyJointsFromHardware()
 {
-  if (feedback_msg_)
+  boost::mutex::scoped_lock feedback_msg_lock(feedback_msg_mutex_, boost::try_to_lock);
+  if (feedback_msg_ && feedback_msg_lock)
   {
-    // Grab a local reference to the last received message, so that we're
-    // working with a consistent snapshot.
-    const jackal_msgs::Feedback::ConstPtr msg = feedback_msg_;
-
     for (int i = 0; i < 4; i++)
     {
-      joints_[i].position = msg->drivers[i % 2].measured_travel;
-      joints_[i].velocity = msg->drivers[i % 2].measured_velocity;
+      joints_[i].position = feedback_msg_->drivers[i % 2].measured_travel;
+      joints_[i].velocity = feedback_msg_->drivers[i % 2].measured_velocity;
       joints_[i].effort = 0;  // TODO(mikepurvis): determine this from amperage data.
     }
   }
@@ -101,7 +98,9 @@ void JackalHardware::publishDriveFromController()
 
 void JackalHardware::feedbackCallback(const jackal_msgs::Feedback::ConstPtr& msg)
 {
-  // Update the feedback message pointer to point to the current message.
+  // Update the feedback message pointer to point to the current message. Block
+  // until the control thread is not using the lock.
+  boost::mutex::scoped_lock lock(feedback_msg_mutex_);
   feedback_msg_ = msg;
 }
 

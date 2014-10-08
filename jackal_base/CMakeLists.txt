@@ -4,7 +4,7 @@ project(jackal_base)
 find_package(catkin REQUIRED COMPONENTS
   controller_manager diagnostic_updater hardware_interface jackal_msgs roscpp roslaunch
   roslint rosserial_server sensor_msgs teleop_twist_joy topic_tools)
-find_package(Boost)
+find_package(Boost REQUIRED COMPONENTS thread)
 
 catkin_package()
 
