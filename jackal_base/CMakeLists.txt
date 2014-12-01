@@ -32,7 +32,10 @@ install(TARGETS jackal_node
 
 install(DIRECTORY launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+) 
+
+install(PROGRAMS scripts/calibrate_compass scripts/compute_calibration
+ DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 roslaunch_add_file_check(launch/base.launch)
 roslint_cpp()
