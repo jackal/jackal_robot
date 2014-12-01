@@ -36,6 +36,9 @@
   <run_depend>sensor_msgs</run_depend>
   <run_depend>teleop_twist_joy</run_depend>
   <run_depend>topic_tools</run_depend>
+  <run_depend>python-scipy</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>geometry_msgs</run_depend>
 
   <export>
   </export>

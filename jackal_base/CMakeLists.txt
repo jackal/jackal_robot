@@ -3,7 +3,7 @@ project(jackal_base)
 
 find_package(catkin REQUIRED COMPONENTS
   controller_manager diagnostic_updater hardware_interface jackal_msgs roscpp roslaunch
-  roslint rosserial_server sensor_msgs teleop_twist_joy topic_tools)
+  roslint rosserial_server sensor_msgs teleop_twist_joy topic_tools tf geometry_msgs std_msgs)
 find_package(Boost REQUIRED COMPONENTS thread)
 
 catkin_package()
@@ -32,7 +32,10 @@ install(TARGETS jackal_node
 
 install(DIRECTORY launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+) 
+
+install(PROGRAMS scripts/calibrate_compass scripts/compute_calibration
+ DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 roslaunch_add_file_check(launch/base.launch)
 roslint_cpp()

@@ -1,5 +1,7 @@
 <launch>
+
   <include file="$(find jackal_description)/launch/description.launch" />
+   
   
   <node pkg="jackal_base" type="jackal_node" name="jackal_node">
     <rosparam>
@@ -24,11 +26,13 @@
   <!-- Filter raw gyro data into a usable IMU message -->
   <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter">
     <rosparam>
-      gain: 0.005
-      use_mag: false
+      gain: 0.1
+      zeta: 0.001
+      use_mag: true
       publish_tf: false
     </rosparam>
-  </node>
+    <rosparam file="/etc/ros/$(env ROS_DISTRO)/imu_compass.yaml" />
+  </node> 
 
   <!-- Differential controller and basic localization -->
   <include file="$(find jackal_control)/launch/control.launch" />
