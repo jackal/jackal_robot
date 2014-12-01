@@ -1,13 +1,7 @@
 <launch>
 
-  <include file="$(find jackal_description)/launch/description.launch" >
-    <arg name="front_laser" value="true"/>
-    <arg name="accessories" value="true" />
-  </include>
-
-  <include file="$(find lms1xx)/launch/LMS1xx.launch">
-    <arg name="frame_id" value="front_laser"/>
-  </include>
+  <include file="$(find jackal_description)/launch/description.launch" />
+   
   
   <node pkg="jackal_base" type="jackal_node" name="jackal_node">
     <rosparam>

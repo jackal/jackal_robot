@@ -8,7 +8,7 @@ DURATION=60
 ROSTOPIC_OUTPUT=$(rostopic list)
 if [[ "$?" != "0" ]]; then
   echo "ROS appears not to be running. Please start ROS service:"
-  echo "sudo service jackal-core start"
+  echo "sudo service ros start"
   exit 1
 fi
 

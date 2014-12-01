@@ -25,7 +25,7 @@ try:
 except ImportError:
   pyplot = None
 
-parser = ArgumentParser(description='Process UM6 bag file for compass calibration. Pass a bag containing /imu/rpy/raw and /imu/mag topics, with the UM6 compass facing upright, being slowly rotated in a clockwise direction for 30-120 seconds.')
+parser = ArgumentParser(description='Process bag file for compass calibration. Pass a bag containing /imu/rpy/raw and /imu/mag topics, with the compass facing upright, being slowly rotated in a clockwise direction for 30-120 seconds.')
 parser.add_argument('bag', metavar='FILE', type=str, help='input bag file')
 parser.add_argument('outfile', metavar='OUTFILE', type=str, help='output yaml file',
                     nargs="?", default="/tmp/calibration.yaml")
