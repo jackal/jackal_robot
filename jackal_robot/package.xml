@@ -15,6 +15,7 @@
 
   <run_depend>jackal_base</run_depend>
   <run_depend>jackal_firmware</run_depend>
+  <run_depend>robot_upstart</run_depend>
 
   <export>
     <metapackage />
