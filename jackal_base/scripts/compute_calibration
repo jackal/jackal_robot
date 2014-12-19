@@ -58,7 +58,7 @@ if (not transform_found):
 
 time_yaw_tuples = []
 for topic, msg, time in bag.read_messages(topics=("/imu/rpy/raw", "imu/rpy/raw")):	
-	o_msg = matrix([msg.vector.x*180/3.14, msg.vector.y*180/3.14, msg.vector.z*180/3.14, 0])
+	o_msg = matrix([msg.vector.x, msg.vector.y, msg.vector.z, 0])
 	o_msg = o_msg.T
 	transformed_msg = t_mat*o_msg
 	time_yaw_tuples.append((time.to_sec(), float(transformed_msg[2])))
