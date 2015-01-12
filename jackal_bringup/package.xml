@@ -2,7 +2,7 @@
 <package>
   <name>jackal_bringup</name>
   <version>0.1.0</version>
-  <description>Launchfiles and scripts for bringing up Jackal's robot software.</description>
+  <description>Scripts for installing Jackal's robot software.</description>
 
   <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
 
@@ -12,6 +12,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>jackal_base</run_depend>
+  <run_depend>robot_upstart</run_depend>
 
   <export>
   </export>
