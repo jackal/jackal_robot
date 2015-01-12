@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2015-01-12)
+------------------
 * read mag msg in radian.
 * added magnetometer calibration computation scripts.
 * Contributors: Shokoofeh Pourmehr
