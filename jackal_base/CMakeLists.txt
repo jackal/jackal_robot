@@ -24,14 +24,7 @@ set_target_properties(${PROJECT_NAME}_simple_joy_node
   PROPERTIES OUTPUT_NAME simple_joy_node PREFIX "")
 add_dependencies(${PROJECT_NAME}_simple_joy_node jackal_msgs_gencpp)
 
-add_executable(${PROJECT_NAME}_sixpair src/sixpair.c)
-target_link_libraries(${PROJECT_NAME}_sixpair usb ${catkin_LIBRARIES})
-set_target_properties(${PROJECT_NAME}_sixpair
-  PROPERTIES OUTPUT_NAME sixpair PREFIX "")
-
-install(TARGETS jackal_node
-                ${PROJECT_NAME}_simple_joy_node
-                ${PROJECT_NAME}_sixpair
+install(TARGETS jackal_node ${PROJECT_NAME}_simple_joy_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch
