@@ -2,15 +2,19 @@ cmake_minimum_required(VERSION 2.8.3)
 project(jackal_base)
 
 find_package(catkin REQUIRED COMPONENTS
-  controller_manager diagnostic_updater hardware_interface jackal_msgs roscpp roslaunch
-  roslint rosserial_server sensor_msgs teleop_twist_joy topic_tools tf geometry_msgs std_msgs)
+  controller_manager diagnostic_updater geometry_msgs hardware_interface jackal_msgs nmea_msgs
+  realtime_tools roscpp roslaunch roslint rosserial_server sensor_msgs std_msgs teleop_twist_joy
+  topic_tools)
 find_package(Boost REQUIRED COMPONENTS thread)
 
 catkin_package()
 
 include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 
-add_executable(jackal_node src/jackal_base src/jackal_hardware src/jackal_diagnostic_updater)
+add_executable(jackal_node
+  src/jackal_base.cpp
+  src/jackal_hardware.cpp
+  src/jackal_diagnostic_updater.cpp)
 target_link_libraries(jackal_node ${catkin_LIBRARIES})
 add_dependencies(jackal_node jackal_msgs_gencpp rosserial_msgs_gencpp)
 
