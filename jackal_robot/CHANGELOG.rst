@@ -2,6 +2,9 @@
 Changelog for package jackal_robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.2.0 (2015-01-12)
 ------------------
 * Add jackal_bringup to robot metapackage.

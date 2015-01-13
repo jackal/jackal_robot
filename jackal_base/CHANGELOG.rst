@@ -2,6 +2,11 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Resolve catkin_lint.
+* Contributors: Mike Purvis
+
 0.2.0 (2015-01-12)
 ------------------
 * read mag msg in radian.
