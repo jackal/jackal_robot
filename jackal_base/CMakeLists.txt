@@ -27,9 +27,8 @@ add_dependencies(${PROJECT_NAME}_simple_joy_node jackal_msgs_gencpp)
 install(TARGETS jackal_node ${PROJECT_NAME}_simple_joy_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-install(DIRECTORY launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-) 
+install(DIRECTORY launch config
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 install(PROGRAMS scripts/calibrate_compass scripts/compute_calibration
  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

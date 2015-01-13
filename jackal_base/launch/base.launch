@@ -1,7 +1,5 @@
 <launch>
-
   <include file="$(find jackal_description)/launch/description.launch" />
-   
   
   <node pkg="jackal_base" type="jackal_node" name="jackal_node">
     <rosparam>
@@ -20,7 +18,7 @@
   <!-- TODO: Eliminate this by compiling the necessary message definitions into jackal_base. -->
   <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
 
-  <!-- Translate NMEASentence messages from the MCU to NavSatFix messages -->
+  <!-- Translate Sentence messages from the MCU to NavSatFix messages -->
   <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" ns="navsat" />
 
   <!-- Filter raw gyro data into a usable IMU message -->
@@ -31,7 +29,7 @@
       use_mag: true
       publish_tf: false
     </rosparam>
-    <rosparam file="/etc/ros/$(env ROS_DISTRO)/imu_compass.yaml" />
+    <rosparam file="/etc/ros/$(env ROS_DISTRO)/ros.d/imu_compass.yaml" />
   </node> 
 
   <!-- Differential controller and basic localization -->
