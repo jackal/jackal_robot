@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.1 (2015-01-12)
+------------------
 * Resolve catkin_lint.
 * Contributors: Mike Purvis
 
