@@ -125,6 +125,7 @@ print("Magnetic circle centered at " + str(center) + ", with radius " + str(radi
 
 with open(args.outfile, "w") as f:
   f.write("# Generated from %s on %s.\n" % (args.bag, datetime.date.today()))
+  f.write("use_mag: true\n")
   f.write("mag_bias_x: %f\n" % center[0])
   f.write("mag_bias_y: %f\n" % center[1])
   f.write("mag_bias_z: %f\n" % center[2])
