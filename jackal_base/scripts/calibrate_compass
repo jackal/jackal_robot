@@ -3,7 +3,7 @@
 TEMPDIR=$(mktemp -d --tmpdir calibrate_compass.XXXX)
 BAG_FILE=${TEMPDIR}/imu_record.bag
 CAL_FILE=${TEMPDIR}/mag_config.yaml
-CAL_FINAL_PATH=${ROS_ETC_DIR}/jackal_base
+CAL_FINAL_PATH=${ROS_ETC_DIR%/*}/jackal_base
 DURATION=60
 
 ROSTOPIC_OUTPUT=$(rostopic list)
