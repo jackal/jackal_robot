@@ -2,6 +2,16 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Simplify mag computation.
+* Don't output stderr from env hook.
+* A new approach to fallback configuration.
+* Add more missing dependencies to jackal_base.
+* Add default compass configuration and install it.
+* Remove sixpair, use system one instead.
+* Contributors: Mike Purvis
+
 0.2.1 (2015-01-12)
 ------------------
 * Resolve catkin_lint.
