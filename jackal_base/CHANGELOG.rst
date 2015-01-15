@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.2 (2015-01-14)
+------------------
 * Simplify mag computation.
 * Don't output stderr from env hook.
 * A new approach to fallback configuration.

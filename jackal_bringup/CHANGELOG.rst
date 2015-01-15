@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.2 (2015-01-14)
+------------------
 * Add default compass configuration and install it.
 * Contributors: Mike Purvis
 
