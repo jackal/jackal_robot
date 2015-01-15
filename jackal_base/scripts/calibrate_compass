@@ -2,7 +2,8 @@
 
 TEMPDIR=$(mktemp -d --tmpdir calibrate_compass.XXXX)
 BAG_FILE=${TEMPDIR}/imu_record.bag
-CAL_FILE=${TEMPDIR}/imu_compass.yaml
+CAL_FILE=${TEMPDIR}/mag_config.yaml
+CAL_FINAL_PATH=${ROS_ETC_DIR%/*}/jackal_base
 DURATION=60
 
 ROSTOPIC_OUTPUT=$(rostopic list)
@@ -55,12 +56,13 @@ fi
 
 if [[ -r $CAL_FILE ]]; then
   echo "Calibration generated in $CAL_FILE."
-  read -r -p "Copy calibration to /etc/ros/${ROS_DISTRO}? [Y/n] " response
+  read -r -p "Copy calibration to ${CAL_FINAL_PATH}? [Y/n] " response
   response=${response,,}    # tolower
   if [[ $response =~ ^(no|n)$ ]]; then
     echo "Skipping."
   else
-    sudo cp $CAL_FILE /etc/ros/${ROS_DISTRO}
+    sudo mkdir -p ${CAL_FINAL_PATH}
+    sudo cp $CAL_FILE ${CAL_FINAL_PATH}
     echo "Restart ROS service to begin using saved calibration."
   fi
 fi

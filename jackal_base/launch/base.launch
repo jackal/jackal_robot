@@ -23,13 +23,15 @@
 
   <!-- Filter raw gyro data into a usable IMU message -->
   <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter">
+    <!-- This environment variable is populated by an env hook in the jackal_base
+         package. It looks for a user-generated mag config (eg, from running
+         the calibrate_compass script), and falls back on a default one. -->
+    <rosparam file="$(env JACKAL_MAG_CONFIG)" />
     <rosparam>
       gain: 0.1
       zeta: 0.001
-      use_mag: true
       publish_tf: false
     </rosparam>
-    <rosparam file="/etc/ros/$(env ROS_DISTRO)/ros.d/imu_compass.yaml" />
   </node> 
 
   <!-- Differential controller and basic localization -->
