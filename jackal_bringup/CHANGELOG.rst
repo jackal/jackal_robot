@@ -2,6 +2,12 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Support changing topic name for accessory laser.
+* Support turning on the LMS1xx accessory via optenv.
+* Contributors: Mike Purvis
+
 0.2.2 (2015-01-14)
 ------------------
 * Add default compass configuration and install it.

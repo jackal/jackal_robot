@@ -2,6 +2,9 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.2.2 (2015-01-14)
 ------------------
 * Simplify mag computation.

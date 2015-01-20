@@ -34,9 +34,9 @@
   <run_depend>diff_drive_controller</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>imu_filter_madgwick</run_depend>
-  <run_depend>jackal_control</run_depend>
-  <run_depend>jackal_description</run_depend>
-  <run_depend>jackal_msgs</run_depend>
+  <run_depend version_gte="0.5">jackal_control</run_depend>
+  <run_depend version_gte="0.5">jackal_description</run_depend>
+  <run_depend version_gte="0.5">jackal_msgs</run_depend>
   <run_depend>nmea_msgs</run_depend>
   <run_depend>nmea_navsat_driver</run_depend>
   <run_depend>python-scipy</run_depend>
