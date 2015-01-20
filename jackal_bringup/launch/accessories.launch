@@ -1,0 +1,16 @@
+<!--
+Launch driver components of Jackal's supported accessories.
+
+Be careful that the defaults in this file are kept aligned with those
+in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
+-->
+<launch>
+  <!-- Primary LMS1xx-series LIDAR, typically front-facing. -->
+  <group ns="laser" if="$(optenv JACKAL_LASER 0)">
+    <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node">
+      <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.1.14)" />
+      <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
+    </node>
+  </group>
+
+</launch>

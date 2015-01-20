@@ -12,6 +12,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>jackal_base</run_depend>
+  <run_depend>lms1xx</run_depend>
   <run_depend>robot_upstart</run_depend>
 
   <export>
