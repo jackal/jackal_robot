@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.0 (2015-01-20)
+------------------
 * Support changing topic name for accessory laser.
 * Support turning on the LMS1xx accessory via optenv.
 * Contributors: Mike Purvis
