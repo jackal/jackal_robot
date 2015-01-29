@@ -14,20 +14,17 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     </node>
   </group>
 
-  <!-- Primary Novatel SMART6 GPS, typically front-facing. -->
-  <group if="$(optenv NOVATEL_GPS 0)">
+  <!-- Optional upgraded GPS receiver. -->
+  <group ns="navsat" if="$(optenv JACKAL_NAVSAT 0)">
     <node pkg="nmea_comms" type="serial_node" name="nmea_serial_node" output="screen">
-      <param name="port" value="$(optenv HUSKY_NAVSAT_PORT /dev/clearpath/gps)" />
-      <param name="baud" value="$(optenv HUSKY_NAVSAT_BAUD 19200)" />
+      <param name="port" value="$(optenv JACKAL_NAVSAT_PORT /dev/clearpath/gps)" />
+      <param name="baud" value="$(optenv JACKAL_NAVSAT_BAUD 19200)" />
     </node>
 
-    <!-- interpretation -->
-    <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver">
-      <remap from="nmea_sentence" to="rx" />
-    </node>
-    
+    <!-- NMEA Interpretation -->
+    <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" />
+
+    <!-- Optional RTK relay -->
+    <node pkg="jackal_bringup" type="" name="navsat_rtk_relay" if="$(optenv JACKAL_NAVSAT_RTK 0)" />
   </group>
-
-
-
 </launch>
