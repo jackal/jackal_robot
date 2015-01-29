@@ -16,44 +16,15 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
 
   <!-- Primary Novatel SMART6 GPS, typically front-facing. -->
   <group if="$(optenv NOVATEL_GPS 0)">
-	<node name="novatel_span_driver" pkg="novatel_span_driver" type="driver">
-    <param name="ip" value="$(env NOVATEL_SPAN_IP)" />
-    <rosparam ns="configuration">
-      log_request:
-        inspvaxb: 0.05
-        inscovb: 1
-        bestposb: 0.05
-        corrimudatab: 0.05
-      command:
-        connectimu: COM3 IMU_KVH_COTS
-        setimuorientation: 5
-        vehiclebodyrotation: 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
-        applyvehiclebodyrotation: enable
-        setimutoantoffset: -0.519200 -0.131500 0.258600 0.001000 0.001000 0.001000
-        setimutoantoffset2: 0.580800 -0.131500 0.258600 0.001000 0.001000 0.001000
-        setinsoffset: 0.030800 -0.294200 -0.104100
-        alignmentmode: AUTOMATIC
-    </rosparam>
+    <node pkg="nmea_comms" type="serial_node" name="nmea_serial_node" output="screen">
+      <param name="port" value="$(optenv HUSKY_NAVSAT_PORT /dev/clearpath/gps)" />
+      <param name="baud" value="$(optenv HUSKY_NAVSAT_BAUD 19200)" />
+    </node>
 
-    <!-- Whether or not the driver should publish a TF, and what frames it should
-         be between. This configuration publishes odom -> base_link. -->
-    <param name="publish_tf" value="true" />
-    <param name="odom_frame" value="odom" />
-    <param name="base_frame" value="base_link" />
-
-    <!-- IMU rate; controls scaling of the imu/data topic values. This is a
-         function of the underlying hardware IMU rate, which is 100Hz for IMU-CPT. -->
-    <param name="rate" value="100" />
-
-    <!-- Disable this if you don't want SPAN to use wheel encoder data. -->
-    <param name="enable_wheel_velocity" value="true" />
-    <remap from="odom" to="encoder" />
-
-    <!-- Disable this if you'd like the Odometry to be absolute within the UTM zone
-         rather than starting from an arbitrary zero origin. -->
-    <param name="zero_start" value="true" />
-  </node>
-
+    <!-- interpretation -->
+    <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver">
+      <remap from="nmea_sentence" to="rx" />
+    </node>
     
   </group>
 
