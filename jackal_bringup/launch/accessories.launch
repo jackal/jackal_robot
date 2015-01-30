@@ -18,7 +18,8 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
   <group ns="navsat" if="$(optenv JACKAL_NAVSAT 0)">
     <node pkg="nmea_comms" type="serial_node" name="nmea_serial_node" output="screen">
       <param name="port" value="$(optenv JACKAL_NAVSAT_PORT /dev/clearpath/gps)" />
-      <param name="baud" value="$(optenv JACKAL_NAVSAT_BAUD 19200)" />
+      <param name="baud" value="$(optenv JACKAL_NAVSAT_BAUD 57600)" />
+      <param name="frame_id" value="$(optenv JACKAL_NAVSAT_MOUNT rear)_navsat" />
     </node>
 
     <!-- NMEA Interpretation -->
