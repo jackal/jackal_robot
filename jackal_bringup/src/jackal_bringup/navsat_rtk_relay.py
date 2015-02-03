@@ -31,13 +31,13 @@ def get_option_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--group",
                         help="multicast IP", metavar="IP", default="224.1.1.1")
-    parser.add_argument("--port",
+    parser.add_argument("--port", type=int,
                         help="multicast port", metavar="PORT", default=20001)
     parser.add_argument("--device",
                         help="multicast device", metavar="ETH", default="eth0")
     parser.add_argument("--serial-port",
                         help="serial port", metavar="SER", default=None)
-    parser.add_argument("--baud",
+    parser.add_argument("--baud", type=int,
                         help="serial baud rate", metavar="RATE", default=57600)
     parser.add_argument("--verbose", action="store_true",
                         help="echo received messages to stdout")
