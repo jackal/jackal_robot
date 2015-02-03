@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.1 (2015-02-03)
+------------------
 * Add multicast lib, add navsat rtk relay.
 * Add launch functionality of the Novatel GPS to accessories.launch
 * Contributors: BryceVoort, Mike Purvis
