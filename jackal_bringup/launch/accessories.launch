@@ -15,7 +15,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
   </group>
 
   <!-- Optional upgraded GPS receiver. -->
-  <group ns="navsat" if="$(optenv JACKAL_NAVSAT 0)">
+  <group ns="navsat/upgrade" if="$(optenv JACKAL_NAVSAT 0)">
     <node pkg="nmea_comms" type="serial_node" name="nmea_serial_node" output="screen">
       <param name="port" value="$(optenv JACKAL_NAVSAT_PORT /dev/clearpath/gps)" />
       <param name="baud" value="$(optenv JACKAL_NAVSAT_BAUD 57600)" />
@@ -26,6 +26,11 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" />
 
     <!-- Optional RTK relay -->
-    <node pkg="jackal_bringup" type="" name="navsat_rtk_relay" if="$(optenv JACKAL_NAVSAT_RTK 0)" />
+    <group if="$(optenv JACKAL_NAVSAT_RTK 0)">
+      <node pkg="jackal_bringup" type="navsat_rtk_relay" name="navsat_rtk_relay"
+            args="--serial-port /dev/clearpath/rtcm
+                  --device $(optenv JACKAL_NAVSAT_RTK_DEVICE wlan0)
+                  --baud $(optenv JACKAL_NAVSAT_RTK_BAUD 57600)" />
+    </group>
   </group>
 </launch>
