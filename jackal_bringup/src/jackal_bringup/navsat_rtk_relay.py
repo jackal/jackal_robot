@@ -48,7 +48,8 @@ def main():
     args, _ = get_option_parser().parse_known_args()
 
     receiver = multicast.MulticastUDPReceiver(args.device, args.group, args.port)
-    print "Created multicast receiver."
+    print "Created multicast receiver on %s:%s, device %s." % (args.group, args.port, args.device)
+    print "Will transmit to %s at %d baud." % (args.serial_port, args.baud)
 
     ser = None
     try:
@@ -57,10 +58,10 @@ def main():
             if args.serial_port and not ser:
                 try:
                     ser = serial.Serial(port=args.serial_port, baudrate=args.baud, timeout=0)
-                    ser.open()
                     print "Opened serial port."
-                except:
+                except Exception as e:
                     ser = None
+                    print "Error opening serial port: %s" % str(e)
             if ser:
                 ser.write(s)
                 ser.flush()
