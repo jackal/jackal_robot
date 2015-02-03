@@ -1,0 +1,16 @@
+<!--
+Launch driver components of Jackal's supported accessories.
+
+Be careful that the defaults in this file are kept aligned with those
+in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
+-->
+<launch>
+  <group if="$(optenv JACKAL_LASER 0)">
+    <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node">
+      <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.1.14)" />
+      <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
+      <remap from="scan" to="$(optenv JACKAL_LASER_SCAN_TOPIC scan)" />
+    </node>
+  </group>
+
+</launch>
