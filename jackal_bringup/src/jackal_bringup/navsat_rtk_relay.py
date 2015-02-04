@@ -25,6 +25,7 @@ import argparse
 import multicast
 import serial
 import sys
+import time
 
 
 def get_option_parser():
@@ -47,11 +48,23 @@ def get_option_parser():
 def main():
     args, _ = get_option_parser().parse_known_args()
 
-    receiver = multicast.MulticastUDPReceiver(args.device, args.group, args.port)
-    print "Created multicast receiver on %s:%s, device %s." % (args.group, args.port, args.device)
-    print "Will transmit to %s at %d baud." % (args.serial_port, args.baud)
+    # This loop is necessary for when the script starts with ROS on the local-filesystems
+    # event, it can run before the network devices are established.
+    while True:
+        try:
+            receiver = multicast.MulticastUDPReceiver(args.device, args.group, args.port)
+            print "Created multicast receiver on %s:%s, device %s." % (args.group, args.port, args.device)
+            break
+        except multicast.Receiver.InterfaceNotFound:
+            print "Unable to find network interface %s, retrying." % args.device
+            time.sleep(1.0)
 
     ser = None
+    if args.serial_port:
+        print "Will transmit to %s at %d baud." % (args.serial_port, args.baud)
+    else:
+        print "No serial port set, listening only."
+
     try:
         while True:
             s = receiver.read(10240)
