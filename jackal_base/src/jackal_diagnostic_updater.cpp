@@ -56,17 +56,17 @@ JackalDiagnosticUpdater::JackalDiagnosticUpdater()
 
   // These message frequencies are reported on separately.
   ros::param::param("~expected_imu_frequency", expected_imu_frequency_, 50.0);
-  imu_diagnostic_ = new diagnostic_updater::TopicDiagnostic("/imu/data_raw", *this,
+  imu_diagnostic_ = new diagnostic_updater::TopicDiagnostic("imu/data_raw", *this,
       diagnostic_updater::FrequencyStatusParam(&expected_imu_frequency_, &expected_imu_frequency_, 0.15),
       diagnostic_updater::TimeStampStatusParam(-1, 1.0));
-  imu_sub_ = nh_.subscribe("/imu/data_raw", 5, &JackalDiagnosticUpdater::imuCallback, this);
+  imu_sub_ = nh_.subscribe("imu/data_raw", 5, &JackalDiagnosticUpdater::imuCallback, this);
 
   ros::param::param("~expected_navsat_frequency", expected_navsat_frequency_, 10.0);
   ros::param::param<std::string>("~navsat_frequency_sentence", navsat_frequency_sentence_, "$GPRMC");
-  navsat_diagnostic_ = new diagnostic_updater::TopicDiagnostic("/navsat/nmea_sentence", *this,
+  navsat_diagnostic_ = new diagnostic_updater::TopicDiagnostic("navsat/nmea_sentence", *this,
       diagnostic_updater::FrequencyStatusParam(&expected_navsat_frequency_, &expected_navsat_frequency_, 0.1),
       diagnostic_updater::TimeStampStatusParam(-1, 1.0));
-  navsat_sub_ = nh_.subscribe("/navsat/nmea_sentence", 5, &JackalDiagnosticUpdater::navsatCallback, this);
+  navsat_sub_ = nh_.subscribe("navsat/nmea_sentence", 5, &JackalDiagnosticUpdater::navsatCallback, this);
 }
 
 void JackalDiagnosticUpdater::generalDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)

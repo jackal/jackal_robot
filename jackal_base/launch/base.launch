@@ -1,47 +1,62 @@
-<launch>
+<launch> 
+  <arg name="robot_name" value="robot_1"/>
+  <param name="tf_prefix" value="$(arg robot_name)"/>
+  <group ns="$(arg robot_name)">
+    <include file="$(find jackal_description)/launch/description.launch" />
+    
+    <node pkg="jackal_base" type="jackal_node" name="jackal_node">
+      <rosparam>
+        # TODO: Specify these in code rather than here.
+        require:
+          publishers:
+            - status
+            - feedback
+            - imu/data_raw
+            - navsat/nmea_sentence
+          subscribers:
+            - cmd_drive
+      </rosparam>
+    </node>
 
-  <include file="$(find jackal_description)/launch/description.launch" />
-   
-  
-  <node pkg="jackal_base" type="jackal_node" name="jackal_node">
-    <rosparam>
-      # TODO: Specify these in code rather than here.
-      require:
-        publishers:
-          - status
-          - feedback
-          - imu/data_raw
-          - navsat/nmea_sentence
-        subscribers:
-          - cmd_drive
-    </rosparam>
-  </node>
+    <!-- TODO: Eliminate this by compiling the necessary message definitions into jackal_base. -->
+    <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
 
-  <!-- TODO: Eliminate this by compiling the necessary message definitions into jackal_base. -->
-  <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
+    <!-- Translate NMEASentence messages from the MCU to NavSatFix messages -->
+    <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" ns="navsat" />
 
-  <!-- Translate NMEASentence messages from the MCU to NavSatFix messages -->
-  <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" ns="navsat" />
+    <!-- Filter raw gyro data into a usable IMU message -->
+    <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter">
+      <rosparam>
+        gain: 0.1
+        zeta: 0.001
+        use_mag: true
+        publish_tf: false
+      </rosparam>
+      <rosparam file="/etc/ros/$(env ROS_DISTRO)/imu_compass.yaml" />
+    </node> 
 
-  <!-- Filter raw gyro data into a usable IMU message -->
-  <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter">
-    <rosparam>
-      gain: 0.1
-      zeta: 0.001
-      use_mag: true
-      publish_tf: false
-    </rosparam>
-    <rosparam file="/etc/ros/$(env ROS_DISTRO)/imu_compass.yaml" />
-  </node> 
+    <!-- Differential controller and basic localization -->
+    <include file="$(find jackal_control)/launch/control.launch">
+      <arg name="tf_prefix" value="/$(arg robot_name)/" />
+    </include>
 
-  <!-- Differential controller and basic localization -->
-  <include file="$(find jackal_control)/launch/control.launch" />
+    <!-- Teleoperation via joystick and rviz interactive markers -->
+    <include file="$(find jackal_control)/launch/teleop.launch">
+      <arg name="tf_prefix" value="/$(arg robot_name)/" />
+    </include>
 
-  <!-- Teleoperation via joystick and rviz interactive markers -->
-  <include file="$(find jackal_control)/launch/teleop.launch" />
+    <!-- Diagnostic Aggregator for robot monitor usage -->
+    <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator">
+      <rosparam command="load" file="$(find jackal_base)/config/diagnostic_analyzers.yaml" />
+    </node>
 
-  <!-- Diagnostic Aggregator for robot monitor usage -->
-  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator">
-    <rosparam command="load" file="$(find jackal_base)/config/diagnostic_analyzers.yaml" />
-  </node>
+    <!-- SICK LIDAR (remove from this file when MRS refactoring complete) -->
+    <arg name="host" default="192.168.1.14" />
+    <node pkg="tf" type="static_transform_publisher" name="laser_tf" 
+          args="0 0 0 0 0 0 /$(arg robot_name)/front_mount /$(arg robot_name)/front_laser 250"/>
+    <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node" output="screen">
+      <param name="host" value="$(arg host)" />
+      <param name="frame_id" value="$(arg robot_name)/front_laser"/>
+    </node>
+  </group>
 </launch>
