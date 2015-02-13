@@ -34,6 +34,7 @@
 #include <string>
 #include <boost/asio/io_service.hpp>
 #include <boost/thread.hpp>
+#include <boost/chrono.hpp>
 
 #include "controller_manager/controller_manager.h"
 #include "jackal_base/jackal_diagnostic_updater.h"
@@ -41,18 +42,23 @@
 #include "ros/ros.h"
 #include "rosserial_server/serial_session.h"
 
+typedef boost::chrono::steady_clock time_source;
 
 void controlThread(ros::Rate rate, jackal_base::JackalHardware* robot, controller_manager::ControllerManager* cm)
 {
-  ros::Time last_time;
+  time_source::time_point last_time = time_source::now();
 
   while (1)
   {
-    ros::Time this_time = ros::Time::now();
-    robot->copyJointsFromHardware();
-    cm->update(this_time, this_time - last_time);
-    robot->publishDriveFromController();
+    // Calculate monotonic time elapsed
+    time_source::time_point this_time = time_source::now();
+    ros::Duration elapsed(
+        boost::chrono::duration_cast<boost::chrono::seconds>(this_time - last_time).count());
     last_time = this_time;
+
+    robot->copyJointsFromHardware();
+    cm->update(ros::Time::now(), elapsed);
+    robot->publishDriveFromController();
     rate.sleep();
   }
 }

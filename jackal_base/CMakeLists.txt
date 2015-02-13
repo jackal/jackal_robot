@@ -5,7 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
   controller_manager diagnostic_updater geometry_msgs hardware_interface jackal_msgs nmea_msgs
   realtime_tools roscpp roslaunch roslint rosserial_server sensor_msgs std_msgs teleop_twist_joy
   topic_tools)
-find_package(Boost REQUIRED COMPONENTS thread)
+find_package(Boost REQUIRED COMPONENTS thread chrono)
 
 catkin_package()
 catkin_add_env_hooks(50.jackal_find_mag_config
@@ -17,7 +17,7 @@ add_executable(jackal_node
   src/jackal_base.cpp
   src/jackal_hardware.cpp
   src/jackal_diagnostic_updater.cpp)
-target_link_libraries(jackal_node ${catkin_LIBRARIES})
+target_link_libraries(jackal_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 add_dependencies(jackal_node jackal_msgs_gencpp rosserial_msgs_gencpp)
 
 add_executable(${PROJECT_NAME}_simple_joy_node src/simple_joy_node.cpp)
