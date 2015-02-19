@@ -32,6 +32,8 @@
  */
 
 #include <string>
+#include <sys/types.h>
+#include <ifaddrs.h>
 
 #include "boost/algorithm/string/predicate.hpp"
 #include "diagnostic_updater/update_functions.h"
@@ -67,6 +69,12 @@ JackalDiagnosticUpdater::JackalDiagnosticUpdater()
       diagnostic_updater::FrequencyStatusParam(&expected_navsat_frequency_, &expected_navsat_frequency_, 0.1),
       diagnostic_updater::TimeStampStatusParam(-1, 1.0));
   navsat_sub_ = nh_.subscribe("/navsat/nmea_sentence", 5, &JackalDiagnosticUpdater::navsatCallback, this);
+
+  // Publish whether the wireless interface has an IP address every second.
+  ros::param::param<std::string>("~wireless_interface", wireless_interface_, "wlan0");
+  ROS_INFO_STREAM("Checking for wireless connectivity on interface: " << wireless_interface_);
+  wifi_connected_pub_ = nh_.advertise<std_msgs::Bool>("wifi_connected", 1);
+  wireless_monitor_timer_ = nh_.createTimer(ros::Duration(1.0), &JackalDiagnosticUpdater::wirelessMonitorCallback, this);
 }
 
 void JackalDiagnosticUpdater::generalDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)
@@ -216,6 +224,40 @@ void JackalDiagnosticUpdater::navsatCallback(const nmea_msgs::Sentence::ConstPtr
   {
     navsat_diagnostic_->tick(msg->header.stamp);
   }
+}
+
+void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
+{
+  std_msgs::Bool wifi_connected_msg;
+  wifi_connected_msg.data = false;
+
+  // Get system structure of interface IP addresses.
+  struct ifaddrs* ifa_head;
+  if (getifaddrs(&ifa_head) != 0)
+  {
+    ROS_WARN("System call getifaddrs returned error code. Unable to detect network interfaces.");
+  }
+
+  // Iterate structure looking for the wireless interface.
+  struct ifaddrs* ifa_current = ifa_head;
+  while(ifa_current != NULL)
+  {
+    if (strcmp(ifa_current->ifa_name, wireless_interface_.c_str()) == 0)
+    {
+      int family = ifa_current->ifa_addr->sa_family;
+      if (family == AF_INET || family == AF_INET6)
+      {
+        wifi_connected_msg.data = true;
+        break;
+      }
+    }
+
+    ifa_current = ifa_current->ifa_next;
+  }
+
+  // Free structure, publish result message.
+  freeifaddrs(ifa_head);
+  wifi_connected_pub_.publish(wifi_connected_msg);
 }
 
 }  // namespace jackal_base

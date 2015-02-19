@@ -12,6 +12,7 @@
           - navsat/nmea_sentence
         subscribers:
           - cmd_drive
+          - wifi_connected
     </rosparam>
   </node>
 

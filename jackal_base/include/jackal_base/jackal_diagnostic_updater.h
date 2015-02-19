@@ -42,6 +42,7 @@
 #include "nmea_msgs/Sentence.h"
 #include "ros/ros.h"
 #include "sensor_msgs/Imu.h"
+#include "std_msgs/Bool.h"
 
 namespace jackal_base
 {
@@ -60,6 +61,7 @@ public:
   void statusCallback(const jackal_msgs::Status::ConstPtr& status);
   void imuCallback(const sensor_msgs::Imu::ConstPtr& msg);
   void navsatCallback(const nmea_msgs::Sentence::ConstPtr& msg);
+  void wirelessMonitorCallback(const ros::TimerEvent& te);
 
 private:
   ros::NodeHandle nh_;
@@ -75,6 +77,10 @@ private:
   std::string navsat_frequency_sentence_;
   diagnostic_updater::TopicDiagnostic* navsat_diagnostic_;
   ros::Subscriber navsat_sub_;
+
+  std::string wireless_interface_;
+  ros::Timer wireless_monitor_timer_;
+  ros::Publisher wifi_connected_pub_;
 };
 
 }  // namespace jackal_base
