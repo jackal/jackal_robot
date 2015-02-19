@@ -52,8 +52,8 @@ void controlThread(ros::Rate rate, jackal_base::JackalHardware* robot, controlle
   {
     // Calculate monotonic time elapsed
     time_source::time_point this_time = time_source::now();
-    ros::Duration elapsed(
-        boost::chrono::duration_cast<boost::chrono::seconds>(this_time - last_time).count());
+    boost::chrono::duration<double> elapsed_duration = this_time - last_time;
+    ros::Duration elapsed(elapsed_duration.count());
     last_time = this_time;
 
     robot->copyJointsFromHardware();
