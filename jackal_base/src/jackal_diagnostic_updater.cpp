@@ -236,6 +236,7 @@ void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
   if (getifaddrs(&ifa_head) != 0)
   {
     ROS_WARN("System call getifaddrs returned error code. Unable to detect network interfaces.");
+    return;
   }
 
   // Iterate structure looking for the wireless interface.
