@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.2 (2015-02-19)
+------------------
 * Retry on startup when network device does not exist.
 * Set args types to int.
 * Contributors: Mike Purvis
