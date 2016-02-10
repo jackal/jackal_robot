@@ -2,6 +2,11 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added bumblebee2 to accessories.
+* Contributors: Tony Baltovski
+
 0.3.3 (2015-02-20)
 ------------------
 
