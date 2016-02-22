@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.5 (2016-02-22)
+------------------
 * Fixed scan topic name and optenv for lms1xx bringup.
 * Contributors: Tony Baltovski
 
