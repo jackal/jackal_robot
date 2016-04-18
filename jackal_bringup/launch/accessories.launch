@@ -14,11 +14,12 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     </node>
   </group>
 
+  <!-- Optional Point Grey Bumblebee2 camera, typically front-facing. -->
   <group if="$(optenv JACKAL_BB2 0)" ns="camera">
-    <node pkg="nodelet" type="nodelet" name="bumblebee_nodelet_manager" args="manager" />
+    <node pkg="nodelet" type="nodelet" name="bumblebee2_nodelet_manager" args="manager" />
 
-    <node pkg="nodelet" type="nodelet" name="bumblebee_nodelet"
-          args="load pointgrey_camera_driver/PointGreyStereoCameraNodelet bumblebee_nodelet_manager" >
+    <node pkg="nodelet" type="nodelet" name="bumblebee2_nodelet"
+          args="load pointgrey_camera_driver/PointGreyStereoCameraNodelet bumblebee2_nodelet_manager" >
       <param name="frame_id" value="$(optenv JACKAL_BB2_MOUNT front)_camera" />
       <param name="frame_rate" value="15" />
       <param name="first_namespace" value="left" />
@@ -43,6 +44,26 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
       <remap from="image_raw" to="right/image_raw"/>
       <remap from="image_mono" to="right/image_mono"/>
       <remap from="image_color" to="right/image_color"/>
+    </node>
+  </group>
+
+  <!-- Optional Point Grey Flea3 camera, typically front-facing. -->
+  <group if="$(optenv JACKAL_FLEA3 0)" ns="camera">
+    <node pkg="nodelet" type="nodelet" name="flea3_nodelet_manager" args="manager" />
+
+    <node pkg="nodelet" type="nodelet" name="flea3_nodelet"
+          args="load pointgrey_camera_driver/PointGreyCameraNodelet flea3_nodelet_manager" >
+      <param name="frame_id" value="$(optenv JACKAL_FLEA3_MOUNT front)_camera" />
+      <param name="serial" value="$(optenv JACKAL_FLEA3_SERIAL 0)" />
+      <param name="frame_rate" value="$(optenv JACKAL_FLEA3_FRAME_RATE 30)" />
+
+      <!-- Use the camera_calibration package to create these files -->
+      <param name="camera_info_url" if="$(optenv JACKAL_FLEA3_CALIBRATION 0)"
+             value="file://$(env HOME)/.ros/camera_info/$(optenv JACKAL_FLEA3_SERIAL 0).yaml" />
+
+    </node>
+    <node pkg="nodelet" type="nodelet" name="image_proc_debayer"
+        args="load image_proc/debayer flea3_nodelet_manager">
     </node>
   </group>
 
