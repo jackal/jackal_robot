@@ -55,6 +55,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
           args="load pointgrey_camera_driver/PointGreyCameraNodelet flea3_nodelet_manager" >
       <param name="frame_id" value="$(optenv JACKAL_FLEA3_MOUNT front)_camera" />
       <param name="serial" value="$(optenv JACKAL_FLEA3_SERIAL 0)" />
+      <param name="frame_rate" value="$(optenv JACKAL_FLEA3_FRAME_RATE 30)" />
 
       <!-- Use the camera_calibration package to create these files -->
       <param name="camera_info_url" if="$(optenv JACKAL_FLEA3_CALIBRATION 0)"
