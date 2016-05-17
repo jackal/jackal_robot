@@ -74,7 +74,8 @@ JackalDiagnosticUpdater::JackalDiagnosticUpdater()
   ros::param::param<std::string>("~wireless_interface", wireless_interface_, "wlan0");
   ROS_INFO_STREAM("Checking for wireless connectivity on interface: " << wireless_interface_);
   wifi_connected_pub_ = nh_.advertise<std_msgs::Bool>("wifi_connected", 1);
-  wireless_monitor_timer_ = nh_.createTimer(ros::Duration(1.0), &JackalDiagnosticUpdater::wirelessMonitorCallback, this);
+  wireless_monitor_timer_ = nh_.createTimer(ros::Duration(1.0),
+      &JackalDiagnosticUpdater::wirelessMonitorCallback, this);
 }
 
 void JackalDiagnosticUpdater::generalDiagnostics(diagnostic_updater::DiagnosticStatusWrapper &stat)
@@ -241,7 +242,7 @@ void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
 
   // Iterate structure looking for the wireless interface.
   struct ifaddrs* ifa_current = ifa_head;
-  while(ifa_current != NULL)
+  while (ifa_current != NULL)
   {
     if (strcmp(ifa_current->ifa_name, wireless_interface_.c_str()) == 0)
     {
