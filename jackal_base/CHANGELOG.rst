@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.6 (2016-09-30)
+------------------
 * Minor linter fixes to jackal_diagnostic_updater.
 * Contributors: Tony Baltovski
 

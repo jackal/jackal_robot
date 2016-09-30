@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.6 (2016-09-30)
+------------------
 * Added parameter for flea3 camera frame rate.
 * Added flea3 to accessories.
 * Contributors: Tony Baltovski
