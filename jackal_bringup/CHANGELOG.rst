@@ -2,6 +2,12 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added parameter for flea3 camera frame rate.
+* Added flea3 to accessories.
+* Contributors: Tony Baltovski
+
 0.3.5 (2016-02-22)
 ------------------
 * Fixed scan topic name and optenv for lms1xx bringup.
