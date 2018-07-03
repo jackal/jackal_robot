@@ -8,7 +8,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
   <!-- Primary LMS1xx-series LIDAR, typically front-facing. -->
   <group if="$(optenv JACKAL_LASER 0)">
     <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node">
-      <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.1.14)" />
+      <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
       <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
       <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
     </node>
