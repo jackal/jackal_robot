@@ -71,7 +71,7 @@ JackalDiagnosticUpdater::JackalDiagnosticUpdater()
   navsat_sub_ = nh_.subscribe("/navsat/nmea_sentence", 5, &JackalDiagnosticUpdater::navsatCallback, this);
 
   // Publish whether the wireless interface has an IP address every second.
-  ros::param::param<std::string>("~wireless_interface", wireless_interface_, "wlan0");
+  ros::param::param<std::string>("~wireless_interface", wireless_interface_, "wlp2s0");
   ROS_INFO_STREAM("Checking for wireless connectivity on interface: " << wireless_interface_);
   wifi_connected_pub_ = nh_.advertise<std_msgs::Bool>("wifi_connected", 1);
   wireless_monitor_timer_ = nh_.createTimer(ros::Duration(1.0),
