@@ -2,6 +2,12 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Updated default IPs for Kinetic
+* Added stereo cameras accessory.
+* Contributors: Dave Niewinski, Tony Baltovski
+
 0.3.6 (2016-09-30)
 ------------------
 * Added parameter for flea3 camera frame rate.
