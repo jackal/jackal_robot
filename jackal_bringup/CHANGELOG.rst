@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.7 (2018-08-02)
+------------------
 * Updated default IPs for Kinetic
 * Added stereo cameras accessory.
 * Contributors: Dave Niewinski, Tony Baltovski
