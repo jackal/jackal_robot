@@ -1,6 +1,6 @@
 <launch>
   <include file="$(find jackal_description)/launch/description.launch" />
-  
+
   <node pkg="jackal_base" type="jackal_node" name="jackal_node">
     <rosparam>
       # TODO: Specify these in code rather than here.
@@ -14,6 +14,7 @@
           - cmd_drive
           - wifi_connected
     </rosparam>
+    <param name="wireless_interface" value="$(optenv JACKAL_WIRELESS_INTERFACE wlp2s0)" />
   </node>
 
   <!-- TODO: Eliminate this by compiling the necessary message definitions into jackal_base. -->
@@ -33,7 +34,7 @@
       zeta: 0.001
       publish_tf: false
     </rosparam>
-  </node> 
+  </node>
 
   <!-- Differential controller and basic localization -->
   <include file="$(find jackal_control)/launch/control.launch" />
