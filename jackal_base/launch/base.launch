@@ -34,6 +34,7 @@
       zeta: 0.001
       publish_tf: false
     </rosparam>
+    <param name="use_magnetic_field_msg" value="false" />
   </node>
 
   <!-- Differential controller and basic localization -->
