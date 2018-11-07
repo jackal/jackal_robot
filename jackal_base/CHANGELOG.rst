@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.8 (2018-11-07)
+------------------
 * [jackal_base] Added environment variable for changing the wireless interface which controlls the light on the HMI.
 * [jackal_base] Fixed linting.
 * Contributors: Tony Baltovski
