@@ -2,6 +2,11 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Temporarily removed point grey driver dependency
+* Contributors: Dave Niewinski
+
 0.3.8 (2018-11-07)
 ------------------
 

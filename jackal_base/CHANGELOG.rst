@@ -2,6 +2,14 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [jackal_base] Minor launch file nit.
+* Merge pull request `#14 <https://github.com/jackal/jackal_robot/issues/14>`_ from hawesie/kinetic-devel
+  Add parameter to change IMU message type.
+* Add paramter to change IMU message type.
+* Contributors: Nick Hawes, Tony Baltovski
+
 0.3.8 (2018-11-07)
 ------------------
 * [jackal_base] Added environment variable for changing the wireless interface which controlls the light on the HMI.
