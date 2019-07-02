@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2019-07-02)
+------------------
 * [jackal_base] Fixed linting.
 * Contributors: Tony Baltovski
 

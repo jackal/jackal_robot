@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2019-07-02)
+------------------
 * Temporarily removed point grey driver dependency
 * Merge pull request `#10 <https://github.com/jackal/jackal_robot/issues/10>`_ from jackal/stereo-cameras
   Added stereo cameras accessory.
