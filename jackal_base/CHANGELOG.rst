@@ -2,6 +2,11 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [jackal_base] Fixed linting.
+* Contributors: Tony Baltovski
+
 0.3.6 (2016-09-30)
 ------------------
 * Minor linter fixes to jackal_diagnostic_updater.

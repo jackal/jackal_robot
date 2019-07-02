@@ -2,6 +2,14 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Temporarily removed point grey driver dependency
+* Merge pull request `#10 <https://github.com/jackal/jackal_robot/issues/10>`_ from jackal/stereo-cameras
+  Added stereo cameras accessory.
+* Added stereo cameras accessory.
+* Contributors: Dave Niewinski, Tony Baltovski
+
 0.3.6 (2016-09-30)
 ------------------
 * Added parameter for flea3 camera frame rate.
