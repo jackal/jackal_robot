@@ -33,11 +33,16 @@
 
 #include <string>
 #include <sys/types.h>
+#if !defined(_WIN32)
 #include <ifaddrs.h>
+#endif
 
 #include "boost/algorithm/string/predicate.hpp"
 #include "diagnostic_updater/update_functions.h"
 #include "jackal_base/jackal_diagnostic_updater.h"
+#ifdef ERROR
+#undef ERROR
+#endif
 
 
 namespace jackal_base
@@ -229,6 +234,8 @@ void JackalDiagnosticUpdater::navsatCallback(const nmea_msgs::Sentence::ConstPtr
 
 void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
 {
+  te;
+#if 0
   std_msgs::Bool wifi_connected_msg;
   wifi_connected_msg.data = false;
 
@@ -260,6 +267,7 @@ void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
   // Free structure, publish result message.
   freeifaddrs(ifa_head);
   wifi_connected_pub_.publish(wifi_connected_msg);
+#endif
 }
 
 }  // namespace jackal_base

@@ -36,6 +36,10 @@
 #include <boost/thread.hpp>
 #include <boost/chrono.hpp>
 
+#if defined(ERROR)
+#undef ERROR
+#endif
+
 #include "controller_manager/controller_manager.h"
 #include "jackal_base/jackal_diagnostic_updater.h"
 #include "jackal_base/jackal_hardware.h"
