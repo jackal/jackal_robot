@@ -16,6 +16,11 @@ catkin_add_env_hooks(50.jackal_find_mag_config
   SHELLS bat DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
 endif()
 
+# remove this before upstream
+if(MSVC)
+  # add_compile_options(/showIncludes)
+endif()
+
 include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 
 add_executable(jackal_node

@@ -33,17 +33,28 @@
 
 #include <string>
 #include <sys/types.h>
-#if !defined(_WIN32)
+
+#include <boost/algorithm/string/predicate.hpp>
+#include <diagnostic_updater/update_functions.h>
+
+#if defined(_WIN32)
+#include <cmath>
+#include <memory>
+
+#include <winsock2.h>
+#include <iphlpapi.h>
+
+// link with iphlpapi.lib
+#pragma comment(lib, "iphlpapi.lib")
+#else
 #include <ifaddrs.h>
 #endif
 
-#include "boost/algorithm/string/predicate.hpp"
-#include "diagnostic_updater/update_functions.h"
 #include "jackal_base/jackal_diagnostic_updater.h"
-#ifdef ERROR
+
+#if defined(_WIN32) && defined(ERROR)
 #undef ERROR
 #endif
-
 
 namespace jackal_base
 {
@@ -232,10 +243,64 @@ void JackalDiagnosticUpdater::navsatCallback(const nmea_msgs::Sentence::ConstPtr
   }
 }
 
+#if defined(_WIN32)
 void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
 {
-  te;
-#if 0
+  std_msgs::Bool wifi_connected_msg;
+  wifi_connected_msg.data = false;
+
+  // Get system structure of interface IP addresses.
+  ULONG flags = GAA_FLAG_INCLUDE_PREFIX;
+
+  // check for both IPv4 and IPv6
+  ULONG family = AF_UNSPEC;
+
+  // pre-allocate 15 KB of buffer is sufficient for most computers
+  int length = static_cast<int>(std::ceil(15e3 / sizeof(IP_ADAPTER_ADDRESSES)));
+  auto addresses = std::make_unique<IP_ADAPTER_ADDRESSES[]>(length);
+  while (true)
+  {
+    ULONG bufferLength = sizeof(IP_ADAPTER_ADDRESSES) * length;
+    auto result = ::GetAdaptersAddresses(family, flags, nullptr, addresses.get(), &bufferLength);
+    if (result == ERROR_BUFFER_OVERFLOW)
+    {
+      length = static_cast<int>(std::ceil(bufferLength / sizeof(IP_ADAPTER_ADDRESSES)));
+      addresses = std::make_unique<IP_ADAPTER_ADDRESSES[]>(length);
+      continue;
+    }
+    else if (result == ERROR_SUCCESS)
+    {
+      break;
+    }
+    else
+    {
+      // GetAdaptersAddresses failed
+      wifi_connected_pub_.publish(wifi_connected_msg);
+      return;
+    }
+  }
+
+  // Iterate structure looking for the wireless interface.
+  auto address = addresses.get();
+  while (address)
+  {
+    // https://docs.microsoft.com/en-us/windows/win32/api/iptypes/ns-iptypes-_ip_adapter_addresses_lh
+    // use IF_TYPE_IEEE80211 for 802.11 wireless network
+    // win32 code path does not consume the wireless_interface_ variable
+    if (address->IfType == IF_TYPE_IEEE80211 && address->OperStatus == IF_OPER_STATUS::IfOperStatusUp)
+    {
+      wifi_connected_msg.data = true;
+      break;
+    }
+
+    address = address->Next;
+  }
+
+  wifi_connected_pub_.publish(wifi_connected_msg);
+}
+#else
+void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
+{
   std_msgs::Bool wifi_connected_msg;
   wifi_connected_msg.data = false;
 
@@ -267,7 +332,7 @@ void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
   // Free structure, publish result message.
   freeifaddrs(ifa_head);
   wifi_connected_pub_.publish(wifi_connected_msg);
-#endif
 }
+#endif
 
 }  // namespace jackal_base
