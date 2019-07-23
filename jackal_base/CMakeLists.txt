@@ -37,8 +37,16 @@ install(TARGETS jackal_node ${PROJECT_NAME}_simple_joy_node
 install(DIRECTORY launch config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
-install(PROGRAMS scripts/calibrate_compass scripts/compute_calibration
- DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+if(NOT WIN32)
+  install(PROGRAMS scripts/calibrate_compass
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+else()
+  install(PROGRAMS scripts/calibrate_compass.bat
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+endif()
+
+install(PROGRAMS scripts/compute_calibration
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 roslaunch_add_file_check(launch/base.launch)
 roslint_cpp()
