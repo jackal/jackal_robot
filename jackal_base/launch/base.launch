@@ -14,6 +14,7 @@
           - cmd_drive
           - wifi_connected
     </rosparam>
+    <param name="port" value="$(optenv JACKAL_PORT /dev/jackal)">
     <param name="wireless_interface" value="$(optenv JACKAL_WIRELESS_INTERFACE wlp2s0)" />
   </node>
 
