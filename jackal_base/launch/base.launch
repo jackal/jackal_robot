@@ -1,4 +1,6 @@
 <launch>
+  <arg name="jackal_port" default="/dev/jackal" />
+
   <include file="$(find jackal_description)/launch/description.launch" />
 
   <node pkg="jackal_base" type="jackal_node" name="jackal_node">
@@ -14,7 +16,7 @@
           - cmd_drive
           - wifi_connected
     </rosparam>
-    <param name="port" value="$(optenv JACKAL_PORT /dev/jackal)">
+    <param name="port" value="$(arg jackal_port)" />
     <param name="wireless_interface" value="$(optenv JACKAL_WIRELESS_INTERFACE wlp2s0)" />
   </node>
 
