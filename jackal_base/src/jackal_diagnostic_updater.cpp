@@ -243,12 +243,12 @@ void JackalDiagnosticUpdater::navsatCallback(const nmea_msgs::Sentence::ConstPtr
   }
 }
 
-#if defined(_WIN32)
 void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
 {
   std_msgs::Bool wifi_connected_msg;
   wifi_connected_msg.data = false;
 
+#if defined(_WIN32)
   // Get system structure of interface IP addresses.
   ULONG flags = GAA_FLAG_INCLUDE_PREFIX;
 
@@ -295,15 +295,7 @@ void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
 
     address = address->Next;
   }
-
-  wifi_connected_pub_.publish(wifi_connected_msg);
-}
 #else
-void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
-{
-  std_msgs::Bool wifi_connected_msg;
-  wifi_connected_msg.data = false;
-
   // Get system structure of interface IP addresses.
   struct ifaddrs* ifa_head;
   if (getifaddrs(&ifa_head) != 0)
@@ -331,8 +323,9 @@ void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
 
   // Free structure, publish result message.
   freeifaddrs(ifa_head);
+#endif
+
   wifi_connected_pub_.publish(wifi_connected_msg);
 }
-#endif
 
 }  // namespace jackal_base
