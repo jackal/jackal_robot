@@ -8,8 +8,13 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Boost REQUIRED COMPONENTS thread chrono)
 
 catkin_package()
+if(NOT WIN32)
 catkin_add_env_hooks(50.jackal_find_mag_config
   SHELLS sh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+else()
+catkin_add_env_hooks(50.jackal_find_mag_config
+  SHELLS bat DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+endif()
 
 include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 
@@ -32,8 +37,16 @@ install(TARGETS jackal_node ${PROJECT_NAME}_simple_joy_node
 install(DIRECTORY launch config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
-install(PROGRAMS scripts/calibrate_compass scripts/compute_calibration
- DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+if(NOT WIN32)
+  install(PROGRAMS scripts/calibrate_compass
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+else()
+  install(PROGRAMS scripts/calibrate_compass.bat
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+endif()
+
+install(PROGRAMS scripts/compute_calibration
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 roslaunch_add_file_check(launch/base.launch)
 roslint_cpp()
