@@ -7,11 +7,20 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
 <launch>
   <!-- Primary LMS1xx-series LIDAR, typically front-facing. -->
   <group if="$(optenv JACKAL_LASER 0)">
-    <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node">
-      <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
-      <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
-      <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
-    </node>
+    <group unless="$(optenv JACKAL_LASER_HOKUYO 0)">
+      <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node">
+        <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
+        <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
+        <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
+      </node>
+    </group>
+    <group if="$(optenv JACKAL_LASER_HOKUYO 0)">
+      <node pkg="urg_node" name="hokuyo" type="urg_node">
+        <param name="_ip_address" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
+        <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
+        <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
+      </node>
+    </group>
   </group>
 
   <!-- Optional Point Grey Bumblebee2 camera, typically front-facing. -->
