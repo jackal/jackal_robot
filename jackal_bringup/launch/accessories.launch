@@ -16,7 +16,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     </group>
     <group if="$(optenv JACKAL_LASER_HOKUYO 0)">
       <node pkg="urg_node" name="hokuyo" type="urg_node">
-        <param name="_ip_address" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
+        <param name="ip_address" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
         <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
         <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
       </node>
