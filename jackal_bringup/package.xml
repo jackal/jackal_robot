@@ -15,7 +15,7 @@
   <run_depend>lms1xx</run_depend>
   <run_depend>urg_node</run_depend>
   <!-- Temporarily removed until the driver is built properly again -->
-  <!-- run_depend>pointgrey_camera_driver</run_depend -->
+  <run_depend>pointgrey_camera_driver</run_depend>
   <run_depend>nmea_comms</run_depend>
   <run_depend>nmea_navsat_driver</run_depend>
   <run_depend version_gte="0.1.1">robot_upstart</run_depend>
