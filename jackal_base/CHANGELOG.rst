@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.3.10 (2020-04-14)
--------------------
+Forthcoming
+-----------
 * [jackal_base] Stopped using Vector3 messages for on-board IMU.
 * Merge pull request `#17 <https://github.com/jackal/jackal_robot/issues/17>`_ from ms-iot/init_windows
   Support Jackal ROS packages on Windows
