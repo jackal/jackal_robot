@@ -2,6 +2,30 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.3.10 (2020-04-14)
+-------------------
+* [jackal_base] Stopped using Vector3 messages for on-board IMU.
+* Merge pull request `#17 <https://github.com/jackal/jackal_robot/issues/17>`_ from ms-iot/init_windows
+  Support Jackal ROS packages on Windows
+* Merge branch 'init_windows' of https://github.com/ms-iot/jackal_robot into init_windows
+* Folding Wifi into single function
+* removed extra code.
+* specify jackal serial port as arg in launch file (`#7 <https://github.com/jackal/jackal_robot/issues/7>`_)
+* allow configuring jackal's port in env (`#6 <https://github.com/jackal/jackal_robot/issues/6>`_)
+* fix calibration script (`#5 <https://github.com/jackal/jackal_robot/issues/5>`_)
+  * fix batch file
+  * fix batch script for mix use of forward slash
+  * remove todo comment
+* check wireless connection on Windows (`#4 <https://github.com/jackal/jackal_robot/issues/4>`_)
+  * check wireless connection on Windows
+  * add comment about unused member variable
+* add calibrate_compass.bat (`#3 <https://github.com/jackal/jackal_robot/issues/3>`_)
+* add env-hook (`#2 <https://github.com/jackal/jackal_robot/issues/2>`_)
+* Merge pull request `#1 <https://github.com/jackal/jackal_robot/issues/1>`_ from seanyen/init_windows
+  Remove to-be-ported code path to unblock the Windows build.
+* quickly get around the build break.
+* Contributors: James Xu, Lou Amadio, Sean Yen, Tony Baltovski, seanyen
+
 0.3.9 (2019-06-19)
 ------------------
 * [jackal_base] Minor launch file nit.
