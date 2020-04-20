@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.6.0 (2020-04-20)
+------------------
 * Fix the IP address for the urg_node used by the hokuyo lidar
 * Add the additional udev rule for the PS4 controller
 * [jackal_bringup] Re-added pointgrey_camera_driver as run depend.

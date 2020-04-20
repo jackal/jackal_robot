@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.6.0 (2020-04-20)
+------------------
 * [jackal_base] Stopped using Vector3 messages for on-board IMU.
 * Folding Wifi into single function
 * removed extra code.
