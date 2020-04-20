@@ -2,6 +2,14 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix the IP address for the urg_node used by the hokuyo lidar
+* [jackal_bringup] Re-added pointgrey_camera_driver as run depend.
+* Add the urg_node to the dependencies
+* Create the urg_node needed for the hokuyo sensor
+* Contributors: Chris I-B, Chris Iverach-Brereton, Tony Baltovski
+
 0.3.9 (2019-06-19)
 ------------------
 * Temporarily removed point grey driver dependency

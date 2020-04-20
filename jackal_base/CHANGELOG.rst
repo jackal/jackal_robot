@@ -2,6 +2,9 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.3.9 (2019-06-19)
 ------------------
 * [jackal_base] Minor launch file nit.
