@@ -2,6 +2,25 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [jackal_base] Stopped using Vector3 messages for on-board IMU.
+* Folding Wifi into single function
+* removed extra code.
+* specify jackal serial port as arg in launch file (`#7 <https://github.com/jackal/jackal_robot/issues/7>`_)
+* allow configuring jackal's port in env (`#6 <https://github.com/jackal/jackal_robot/issues/6>`_)
+* fix calibration script (`#5 <https://github.com/jackal/jackal_robot/issues/5>`_)
+  * fix batch file
+  * fix batch script for mix use of forward slash
+  * remove todo comment
+* check wireless connection on Windows (`#4 <https://github.com/jackal/jackal_robot/issues/4>`_)
+  * check wireless connection on Windows
+  * add comment about unused member variable
+* add calibrate_compass.bat (`#3 <https://github.com/jackal/jackal_robot/issues/3>`_)
+* add env-hook (`#2 <https://github.com/jackal/jackal_robot/issues/2>`_)
+* quickly get around the build break.
+* Contributors: James Xu, Lou Amadio, Sean Yen, Tony Baltovski, seanyen
+
 0.3.9 (2019-06-19)
 ------------------
 * [jackal_base] Minor launch file nit.
