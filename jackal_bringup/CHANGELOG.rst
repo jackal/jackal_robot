@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2020-04-20)
+------------------
 * Fix the IP address for the urg_node used by the hokuyo lidar
 * [jackal_bringup] Re-added pointgrey_camera_driver as run depend.
 * Add the urg_node to the dependencies
