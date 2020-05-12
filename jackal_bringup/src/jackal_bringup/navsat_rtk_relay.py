@@ -1,4 +1,4 @@
-# Software License Agreement (BSD) 
+# Software License Agreement (BSD)
 #
 # @author    Mike Purvis <mpurvis@clearpathrobotics.com>
 # @copyright (c) 2015, Clearpath Robotics, Inc., All rights reserved.
@@ -53,17 +53,17 @@ def main():
     while True:
         try:
             receiver = multicast.MulticastUDPReceiver(args.device, args.group, args.port)
-            print "Created multicast receiver on %s:%s, device %s." % (args.group, args.port, args.device)
+            print ("Created multicast receiver on %s:%s, device %s." % (args.group, args.port, args.device))
             break
         except multicast.Receiver.InterfaceNotFound:
-            print "Unable to find network interface %s, retrying." % args.device
+            print ("Unable to find network interface %s, retrying." % args.device)
             time.sleep(1.0)
 
     ser = None
     if args.serial_port:
-        print "Will transmit to %s at %d baud." % (args.serial_port, args.baud)
+        print ("Will transmit to %s at %d baud." % (args.serial_port, args.baud))
     else:
-        print "No serial port set, listening only."
+        print ("No serial port set, listening only.")
 
     try:
         while True:
@@ -71,10 +71,10 @@ def main():
             if args.serial_port and not ser:
                 try:
                     ser = serial.Serial(port=args.serial_port, baudrate=args.baud, timeout=0)
-                    print "Opened serial port."
+                    print ("Opened serial port.")
                 except Exception as e:
                     ser = None
-                    print "Error opening serial port: %s" % str(e)
+                    print ("Error opening serial port: %s" % str(e))
             if ser:
                 ser.write(s)
                 ser.flush()
@@ -85,5 +85,5 @@ def main():
     except:
         if ser:
             ser.close()
-            print "Closed serial port."
+            print ("Closed serial port.")
         raise

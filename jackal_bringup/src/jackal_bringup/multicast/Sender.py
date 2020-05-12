@@ -1,14 +1,14 @@
-#!/bin/env python
+#!/bin/env python3
 
 import socket
 import struct
 import fcntl
 import array
 
-import Receiver
+from . import Receiver
 
 class Datagram(Receiver.Datagram):
-    
+
     def __init__(self, source_address, source_port, target_address, target_port, ttl=32, loop=1):
         Receiver.Datagram.__init__(self, source_address, source_port)
 
@@ -22,6 +22,6 @@ class Datagram(Receiver.Datagram):
         if self.multicast:
             self._socket.setsockopt (socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, self.ttl)
             self._socket.setsockopt (socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, self.loop)
-            
+
     def write(self, data, *args):
         self._socket.sendto ( data, (self.target_address, self.target_port))

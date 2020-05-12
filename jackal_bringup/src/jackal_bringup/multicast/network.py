@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python3
 
 import socket
 import struct
@@ -13,7 +13,7 @@ import array
 SIOCGIFCONF = 0x8912
 SIOCGIFFLAGS = 0x8913
 
-IFF_MULTICAST = 0x1000   
+IFF_MULTICAST = 0x1000
 
 class IfConfigNotSupported(Exception): pass
 
@@ -23,7 +23,7 @@ def ifconfig():
     """
     if NO_FCNTL:
         raise IfConfigNotSupported ( "No fcntl")
-    
+
     class _interface:
         def __init__(self, name):
             self.name = name
@@ -44,16 +44,17 @@ def ifconfig():
     if arch == "32bit": offsets = (32, 32)
     elif arch == "64bit": offsets = (16, 40)
     else: raise OSError ( "Unsupported architecture: %s" % (arch) )
-        
+
     #Get the list of all network interfaces
     _socket = socket.socket (socket.AF_INET, socket.SOCK_DGRAM)
     buffer = array.array ( 'B', '\0' * 128 * offsets[1] )
     reply_length = struct.unpack ( 'iL', fcntl.ioctl(_socket.fileno(), SIOCGIFCONF, struct.pack ('iL', 4096, buffer.buffer_info()[0])))[0]
-    if_list = buffer.tostring()    
-    if_list = filter(lambda x: len(x[0]) > 0, [ (if_list[i:i+offsets[0]].split('\0', 1)[0], socket.inet_ntoa(if_list[i+20:i+24])) for i in range(0, 4096, offsets[1])])
-    
+    if_list = buffer.tostring()
+    #if_list = filter(lambda x: len(x[0]) > 0, [ (if_list[i:i+offsets[0]].split('\0', 1)[0], socket.inet_ntoa(if_list[i+20:i+24])) for i in range(0, 4096, offsets[1])])
+    if_list = [x for x in [ (if_list[i:i+offsets[0]].split('\0', 1)[0], socket.inet_ntoa(if_list[i+20:i+24])) for i in range(0, 4096, offsets[1])] if len(x[0]) > 0]
+
     iff = {}
-    
+
     #Get ip addresses for each interface
     for (ifname, addr) in if_list:
         iff[ifname] = iff.get (ifname, _interface(ifname) );
@@ -61,8 +62,6 @@ def ifconfig():
         iff[ifname].addresses.append ( addr )
         iff[ifname].up = bool(flags & 1)
         iff[ifname].multicast = bool(flags & IFF_MULTICAST)
-        
+
     _socket.close()
     return iff
-
-
