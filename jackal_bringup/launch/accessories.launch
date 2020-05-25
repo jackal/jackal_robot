@@ -164,15 +164,15 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
   </group>
 
   <!-- Optional Azure Kinect -->
-  <group if="$(optenv JACKAL_AZURE_KINECT 0)">
+  <group if="$(optenv JACKAL_AZURE_KINECT 0)" ns="kinect">
     <!-- Parameters & node mainly copied from the Kinect's driver.launch file -->
     <arg name="tf_prefix"         default="" />               <!-- Prefix added to tf frame IDs. It typically contains a trailing '_' unless empty. -->
 
     <!--<param name="robot_description"
       command="xacro $(find azure_kinect_ros_driver)/urdf/azure_kinect.urdf.xacro tf_prefix:=$(arg tf_prefix)" />-->
 
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+    <!--<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />-->
 
     <arg name="depth_enabled"           default="true" />           <!-- Enable or disable the depth camera -->
     <arg name="depth_mode"              default="WFOV_UNBINNED" />  <!-- Set the depth camera mode, which affects FOV, depth range, and camera resolution. See Azure Kinect documentation for full details. Valid options: NFOV_UNBINNED, NFOV_2X2BINNED, WFOV_UNBINNED, WFOV_2X2BINNED, and PASSIVE_IR -->
