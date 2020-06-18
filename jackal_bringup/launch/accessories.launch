@@ -25,7 +25,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
           <!-- TODO: change ttyUSB0 to a symlink according to a udev rule we'll create later -->
           <param name="serial_port"         type="string" value="$(optenv JACKAL_LASER_RP_PORT /dev/ttyUSB0)"/>
           <param name="serial_baudrate"     type="int"    value="$(optenv JACKAL_LASER_RP_BAUD 115200)"/><!--A1/A2 = 115200, A3 = 256000 -->
-          <param name="frame_id"            type="string" value="laser"/>
+          <param name="frame_id"            type="string" value="$(optenv JACKAL_LASER_MOUNT front)_laser"/>
           <param name="inverted"            type="bool"   value="false"/>
           <param name="angle_compensate"    type="bool"   value="true"/>
           <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
@@ -216,6 +216,20 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
       <param name="imu_rate_target" type="int" value="$(arg imu_rate_target)"/>
       <param name="wired_sync_mode" type="int" value="$(arg wired_sync_mode)"/>
       <param name="subordinate_delay_off_master_usec" type="int" value="$(arg subordinate_delay_off_master_usec)"/>
+    </node>
+
+    <!-- Convert the Kinect pointcloud to a laserscan -->
+    <node name="kinect_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node">
+      <remap from="cloud_in" to="kinect/points2" />
+      <remap from="scan" to="$(optenv JACKAL_AZURE_KINECT_MOUNT front)/scan" />
+      <param name="angle_min" value="-0.654498" />
+      <param name="angle_max" value="0.654498" />
+      <param name="angle_increment" value="0.008726917" />
+      <param name="target_frame" value="$(optenv JACKAL_AZURE_KINECT_MOUNT front)_mount" />
+      <param name="range_min" value="0.5" />
+      <param name="range_max" value="5.46" />
+      <param name="min_height" value="0.0" />
+      <param name="max_height" value="1.0" />
     </node>
   </group>
 
