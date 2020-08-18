@@ -7,39 +7,48 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
 <launch>
   <group if="$(optenv JACKAL_LASER 0)">
     <!--
-      We support 3 different lidar accessories out of the box:
+      We support 4 different lidar accessories out of the box:
         - sick lms1xx (default) if JACKAL_LASER=1
+        - velodyne vlp16 if JACKAL_LASER=1 && JACKAL_LASER_VELODYNE=1
         - hokuyo ust10 if JACKAL_LASER=1 && JACKAL_LASER_HOKUYO=1
         - slamtec a1/2 if JACKAL_LASER=1 && JACKAL_LASER_RP=1
     -->
-    <group if="$(optenv JACKAL_LASER_HOKUYO 0)">
-      <node pkg="urg_node" name="hokuyo" type="urg_node">
-        <param name="ip_address" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
-        <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
-        <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
-      </node>
-    </group>
-    <group unless="$(optenv JACKAL_LASER_HOKUYO 0)">
-      <group if="$(optenv JACKAL_LASER_RP 0)">
-        <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
-          <!-- TODO: change ttyUSB0 to a symlink according to a udev rule we'll create later -->
-          <param name="serial_port"         type="string" value="$(optenv JACKAL_LASER_RP_PORT /dev/ttyUSB0)"/>
-          <param name="serial_baudrate"     type="int"    value="$(optenv JACKAL_LASER_RP_BAUD 115200)"/><!--A1/A2 = 115200, A3 = 256000 -->
-          <param name="frame_id"            type="string" value="$(optenv JACKAL_LASER_MOUNT front)_laser"/>
-          <param name="inverted"            type="bool"   value="false"/>
-          <param name="angle_compensate"    type="bool"   value="true"/>
-          <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
-        </node>
-      </group>
-      <group unless="$(optenv JACKAL_LASER_RP 0)">
-        <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node">
-          <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
+    <group if="$(optenv JACKAL_LASER_VELODYNE 0)">
+      <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
+        <arg name="device_ip" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
+        <arg name="frame_id"  value="$(optenv JACKAL_LASER_MOUNT front)_velodyne" />
+      </include>
+    </group> <!-- if VELODYNE -->
+    <group unless="$(optenv JACKAL_LASER_VELODYNE 0)">
+      <group if="$(optenv JACKAL_LASER_HOKUYO 0)">
+        <node pkg="urg_node" name="hokuyo" type="urg_node">
+          <param name="ip_address" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
           <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
           <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
         </node>
-      </group>
-    </group>
-  </group>
+      </group> <!-- if HOKUYO -->
+      <group unless="$(optenv JACKAL_LASER_HOKUYO 0)">
+        <group if="$(optenv JACKAL_LASER_RP 0)">
+          <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+            <!-- TODO: change ttyUSB0 to a symlink according to a udev rule we'll create later -->
+            <param name="serial_port"         type="string" value="$(optenv JACKAL_LASER_RP_PORT /dev/ttyUSB0)"/>
+            <param name="serial_baudrate"     type="int"    value="$(optenv JACKAL_LASER_RP_BAUD 115200)"/><!--A1/A2 = 115200, A3 = 256000 -->
+            <param name="frame_id"            type="string" value="$(optenv JACKAL_LASER_MOUNT front)_laser"/>
+            <param name="inverted"            type="bool"   value="false"/>
+            <param name="angle_compensate"    type="bool"   value="true"/>
+            <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
+          </node>
+        </group> <!-- if RP -->
+        <group unless="$(optenv JACKAL_LASER_RP 0)">
+          <node pkg="lms1xx" name="lms1xx" type="LMS1xx_node">
+            <param name="host" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
+            <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
+            <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
+          </node>
+        </group> <!-- unless RP -->
+      </group> <!-- unless HOKYUO -->
+    </group> <!-- unless VELODYNE -->
+  </group> <!-- if LASER -->
 
   <!-- Optional Point Grey Bumblebee2 camera, typically front-facing. -->
   <group if="$(optenv JACKAL_BB2 0)" ns="camera">
