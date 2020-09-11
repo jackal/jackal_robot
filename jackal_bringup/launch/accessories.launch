@@ -251,7 +251,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     <arg name="tf_prefix"           default="$(arg camera)"/>
     <arg name="external_manager"    default="false"/>
     <arg name="manager"             default="realsense2_camera_manager"/>
-    <arg name="base_frame_id"       default="$(optenv JACKAL_REANSENSE_MOUNT front_fender)_realsense" />
+    <arg name="base_frame_id"       default="$(optenv JACKAL_REALSENSE_MOUNT front_fender)_realsense" />
 
     <arg name="fisheye_width"       default="640"/>
     <arg name="fisheye_height"      default="480"/>
