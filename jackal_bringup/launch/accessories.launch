@@ -6,7 +6,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
 -->
 <launch>
   <!--
-    Primary and secondary 2D lasers.  Model defined by JACKAL_LASER_MODEL and JACKAL_LASER2_MODEL.
+    Primary and secondary 2D lasers.  Model defined by JACKAL_LASER_MODEL and JACKAL_LASER_SECONDARY_MODEL.
     Valid models:
       - lms1xx (default)  :: SICK LMS1xx
       - ust10             :: Hokuyo UST10
@@ -28,20 +28,20 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
       </node>
     </group>
   </group>
-  <group if="$(optenv JACKAL_LASER2 0)">
-    <arg name="lidar2_model" value="$(optenv JACKAL_LASER2_MODEL lms1xx)" />
+  <group if="$(optenv JACKAL_LASER_SECONDARY 0)">
+    <arg name="lidar2_model" value="$(optenv JACKAL_LASER_SECONDARY_MODEL lms1xx)" />
     <group if="$(eval arg('lidar2_model') == 'lms1xx')">
       <node pkg="lms1xx" name="lms1xx_2" type="LMS1xx_node">
-        <param name="host" value="$(optenv JACKAL_LASER2_HOST 192.168.131.21)" />
-        <param name="frame_id" value="$(optenv JACKAL_LASER2_MOUNT rear)_laser" />
-        <remap from="scan" to="$(optenv JACKAL_LASER2_TOPIC rear/scan)" />
+        <param name="host" value="$(optenv JACKAL_LASER_SECONDARY_HOST 192.168.131.21)" />
+        <param name="frame_id" value="$(optenv JACKAL_LASER_SECONDARY_MOUNT rear)_laser" />
+        <remap from="scan" to="$(optenv JACKAL_LASER_SECONDARY_TOPIC rear/scan)" />
       </node>
     </group>
     <group if="$(eval arg('lidar2_model') == 'ust10')">
       <node pkg="urg_node" name="hokuyo_2" type="urg_node">
-        <param name="ip_address" value="$(optenv JACKAL_LASER2_HOST 192.168.131.21)" />
-        <param name="frame_id" value="$(optenv JACKAL_LASER2_RPY_MOUNT rear)_laser" />
-        <remap from="scan" to="$(optenv JACKAL_LASER2_TOPIC rear/scan)" />
+        <param name="ip_address" value="$(optenv JACKAL_LASER_SECONDARY_HOST 192.168.131.21)" />
+        <param name="frame_id" value="$(optenv JACKAL_LASER_SECONDARY_RPY_MOUNT rear)_laser" />
+        <remap from="scan" to="$(optenv JACKAL_LASER_SECONDARY_TOPIC rear/scan)" />
       </node>
     </group>
   </group>
