@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.6.1 (2021-03-08)
+------------------
 * Use eval to find the mag config. This should fix a bug when jackal is installed to ros.d
 * Set default for optenv JACKAL_MAG_CONFIG
 * Removed env-hooks
