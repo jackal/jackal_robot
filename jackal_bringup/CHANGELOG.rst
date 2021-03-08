@@ -2,6 +2,18 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add VLP16 support, refactor main/secondary laser envar support (`#27 <https://github.com/jackal/jackal_robot/issues/27>`_)
+  * Add groups for the front/rear fender lasers' nodes
+  * Revert the front/rear laser frames to "front_laser" and "rear_laser" respectively, to match with the frames in jackal_description (proposed PR to rename them was rejected)
+  * Enable launching the secondary 2D laser, and the primary 3D laser
+  * Rename LASER2 to LASER_SECONDARY
+  * Change the default mount for the 3d laser to the middle
+  Co-authored-by: Tony Baltovski <tbaltovski@clearpathrobotics.com>
+* Remove the PS4 symlink; we've consolidated the udev rules and are relying on ds4drv to provide that rule now
+* Contributors: Chris I-B, Chris Iverach-Brereton
+
 0.6.0 (2020-04-20)
 ------------------
 * Fix the IP address for the urg_node used by the hokuyo lidar

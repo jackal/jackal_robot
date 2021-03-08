@@ -2,6 +2,13 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use eval to find the mag config. This should fix a bug when jackal is installed to ros.d
+* Set default for optenv JACKAL_MAG_CONFIG
+* Removed env-hooks
+* Contributors: Chris Iverach-Brereton, Dave Niewinski
+
 0.6.0 (2020-04-20)
 ------------------
 * [jackal_base] Stopped using Vector3 messages for on-board IMU.
