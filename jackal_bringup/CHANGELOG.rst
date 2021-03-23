@@ -2,10 +2,20 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.5.1 (2020-04-14)
+0.6.1 (2021-03-08)
 ------------------
-* Merge pull request `#18 <https://github.com/jackal/jackal_robot/issues/18>`_ from jackal/melodic-testing-fixes
-  Small fixes revealed in testing on live hardware
+* Add VLP16 support, refactor main/secondary laser envar support (`#27 <https://github.com/jackal/jackal_robot/issues/27>`_)
+  * Add groups for the front/rear fender lasers' nodes
+  * Revert the front/rear laser frames to "front_laser" and "rear_laser" respectively, to match with the frames in jackal_description (proposed PR to rename them was rejected)
+  * Enable launching the secondary 2D laser, and the primary 3D laser
+  * Rename LASER2 to LASER_SECONDARY
+  * Change the default mount for the 3d laser to the middle
+  Co-authored-by: Tony Baltovski <tbaltovski@clearpathrobotics.com>
+* Remove the PS4 symlink; we've consolidated the udev rules and are relying on ds4drv to provide that rule now
+* Contributors: Chris I-B, Chris Iverach-Brereton
+
+0.6.0 (2020-04-20)
+------------------
 * Fix the IP address for the urg_node used by the hokuyo lidar
 * Add the additional udev rule for the PS4 controller
 * [jackal_bringup] Re-added pointgrey_camera_driver as run depend.
@@ -13,6 +23,11 @@ Changelog for package jackal_bringup
 * Add the urg_node to the dependencies
 * Create the urg_node needed for the hokuyo sensor
 * Contributors: Chris I-B, Chris Iverach-Brereton, Tony Baltovski
+
+0.5.1 (2020-04-14)
+------------------
+* Merge pull request `#18 <https://github.com/jackal/jackal_robot/issues/18>`_ from jackal/melodic-testing-fixes
+  Small fixes revealed in testing on live hardware
 
 0.3.9 (2019-06-19)
 ------------------

@@ -2,9 +2,6 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
-
 0.6.1 (2021-03-08)
 ------------------
 * Use eval to find the mag config. This should fix a bug when jackal is installed to ros.d
@@ -39,6 +36,8 @@ Changelog for package jackal_base
 * Merge pull request `#17 <https://github.com/jackal/jackal_robot/issues/17>`_ from ms-iot/init_windows
   Support Jackal ROS packages on Windows
 * Merge branch 'init_windows' of https://github.com/ms-iot/jackal_robot into init_windows
+* quickly get around the build break.
+* Contributors: James Xu, Lou Amadio, Sean Yen, Tony Baltovski, seanyen
 
 0.3.9 (2019-06-19)
 ------------------
