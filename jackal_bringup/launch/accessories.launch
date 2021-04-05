@@ -70,7 +70,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
   <group if="$(optenv JACKAL_LASER_3D 0)">
     <arg name="lidar_3d_model" value="$(optenv JACKAL_LASER_3D_MODEL vlp16)" />
     <group if="$(eval arg('lidar_3d_model') == 'vlp16')">
-      <include file="$(find velodyne_pointcloud)/launch/VLP-16.launch">
+      <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
         <arg name="device_ip" value="$(optenv JACKAL_LASER_3D_HOST 192.168.131.20)" />
         <remap from="velodyne_points" to="$(optenv JACKAL_LASER_3D_TOPIC mid/points)" />
       </include>
