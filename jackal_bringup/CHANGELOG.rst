@@ -2,6 +2,16 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge development changes from live hardware test into noetic-devel
+* Fix the name of the VLP16 launch file that gets included in accessories
+* Fix a c&p error where and arg was referenced before it was actually assigned
+* Merge pull request `#24 <https://github.com/jackal/jackal_robot/issues/24>`_ from ScottMcCormack/noetic-devel
+  Fixed typo with OSError exception handling
+* Apply python 3 fixes.  Note: the lambda function in network.py is auto-generated, and the original is in a comment in case there are problems down the road.
+* Contributors: Chris I-B, Chris Iverach-Brereton, Scott McCormack
+
 0.6.1 (2021-03-08)
 ------------------
 * Add VLP16 support, refactor main/secondary laser envar support (`#27 <https://github.com/jackal/jackal_robot/issues/27>`_)

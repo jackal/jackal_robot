@@ -2,6 +2,13 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge development changes from live hardware test into noetic-devel
+* Sort the jackal_base changelog version tags
+* Fix the scipy dependency so it resolves properly. Minor code cleanup
+* Contributors: Chris I-B, Chris Iverach-Brereton
+
 0.6.1 (2021-03-08)
 ------------------
 * Use eval to find the mag config. This should fix a bug when jackal is installed to ros.d

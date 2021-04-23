@@ -2,6 +2,11 @@
 Changelog for package jackal_robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge development changes from live hardware test into noetic-devel
+* Contributors: Chris I-B, Chris Iverach-Brereton
+
 0.6.1 (2021-03-08)
 ------------------
 
