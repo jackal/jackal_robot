@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.0 (2021-04-23)
+------------------
 * Merge development changes from live hardware test into noetic-devel
 * Fix the name of the VLP16 launch file that gets included in accessories
 * Fix a c&p error where and arg was referenced before it was actually assigned

@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.0 (2021-04-23)
+------------------
 * Merge development changes from live hardware test into noetic-devel
 * Sort the jackal_base changelog version tags
 * Fix the scipy dependency so it resolves properly. Minor code cleanup
