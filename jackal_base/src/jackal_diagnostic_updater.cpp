@@ -265,7 +265,7 @@ void JackalDiagnosticUpdater::wirelessMonitorCallback(const ros::TimerEvent& te)
     if (result == ERROR_BUFFER_OVERFLOW)
     {
       length = static_cast<int>(std::ceil(bufferLength / sizeof(IP_ADAPTER_ADDRESSES)));
-      addresses = std::make_unique<IP_ADAPTER_ADDRESSES[]>(length);
+      addresses = std::make_unique<IP_ADAPTER_ADDRESSES[]>(length);  // NOLINT(build/include_what_you_use)
       continue;
     }
     else if (result == ERROR_SUCCESS)

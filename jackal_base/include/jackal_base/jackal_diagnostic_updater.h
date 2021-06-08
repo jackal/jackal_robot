@@ -37,7 +37,7 @@
 #include <string>
 
 #include <diagnostic_updater/diagnostic_updater.h>
-#include <diagnostic_updater/publisher.h> // this implicitly includes <windows.h>
+#include <diagnostic_updater/publisher.h>  // this implicitly includes <windows.h>
 #include <jackal_msgs/Status.h>
 #include <nmea_msgs/Sentence.h>
 #include <ros/ros.h>
