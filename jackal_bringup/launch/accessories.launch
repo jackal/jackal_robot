@@ -46,26 +46,6 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     </group>
   </group>
 
-  <!-- Optional front/rear UST-10 lidars mounted to the accessory fenders -->
-  <group if="$(optenv JACKAL_FRONT_ACCESSORY_FENDER 0)">
-    <group if="$(optenv JACKAL_FRONT_FENDER_UST10 0)">
-      <node pkg="urg_node" name="front_fender_hokuyo" type="urg_node">
-        <param name="ip_address" value="$(optenv JACKAL_FRONT_LASER_HOST 192.168.131.20)" />
-        <param name="frame_id" value="front_laser" />
-        <remap from="scan" to="$(optenv JACKAL_FRONT_LASER_TOPIC front/scan)" />
-      </node>
-    </group>
-  </group>
-  <group if="$(optenv JACKAL_REAR_ACCESSORY_FENDER 0)">
-    <group if="$(optenv JACKAL_REAR_FENDER_UST10 0)">
-      <node pkg="urg_node" name="rear_fender_hokuyo" type="urg_node">
-        <param name="ip_address" value="$(optenv JACKAL_REAR_LASER_HOST 192.168.131.21)" />
-        <param name="frame_id" value="rear_laser" />
-        <remap from="scan" to="$(optenv JACKAL_REAR_LASER_TOPIC rear/scan)" />
-      </node>
-    </group>
-  </group>
-
   <!-- Optional 3D lidar -->
   <group if="$(optenv JACKAL_LASER_3D 0)">
     <arg name="lidar_3d_model" value="$(optenv JACKAL_LASER_3D_MODEL vlp16)" />
@@ -83,6 +63,8 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
       <node pkg="urg_node" name="front_fender_hokuyo" type="urg_node">
         <param name="ip_address" value="$(optenv JACKAL_FRONT_LASER_HOST 192.168.131.20)" />
         <param name="frame_id" value="front_laser" />
+        <param name="angle_min" value="-1.5707963" />
+        <param name="angle_max" value="1.5707963"/>
         <remap from="scan" to="$(optenv JACKAL_FRONT_LASER_TOPIC front/scan)" />
       </node>
     </group>
@@ -92,6 +74,8 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
       <node pkg="urg_node" name="rear_fender_hokuyo" type="urg_node">
         <param name="ip_address" value="$(optenv JACKAL_REAR_LASER_HOST 192.168.131.21)" />
         <param name="frame_id" value="rear_laser" />
+        <param name="angle_min" value="-1.5707963" />
+        <param name="angle_max" value="1.5707963"/>
         <remap from="scan" to="$(optenv JACKAL_REAR_LASER_TOPIC rear/scan)" />
       </node>
     </group>
