@@ -202,4 +202,14 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
                   --baud $(optenv JACKAL_NAVSAT_RTK_BAUD 57600)" />
     </group>
   </group>
+
+
+  <!-- Optional GX5 family IMU -->
+  <group if="$(optenv JACKAL_GX5_IMU 0)">
+    <include file="$(find ros_mscl)/launch/microstrain.launch">
+      <arg name="imu_frame_id"  value="gx5_link" />
+      <arg name="port"          value="$(optenv JACKAL_GX5_IMU_PORT /dev/microstrain)" />
+      <arg name="use_enu_frame" value="true" />
+    </include>
+  </group>
 </launch>
