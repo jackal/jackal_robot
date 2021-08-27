@@ -55,6 +55,12 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
         <remap from="velodyne_points" to="$(optenv JACKAL_LASER_3D_TOPIC mid/points)" />
       </include>
     </group>
+    <group if="$(eval arg('lidar_3d_model') == 'hdl32e')">
+      <include file="$(find velodyne_pointcloud)/launch/32e_points.launch">
+        <arg name="device_ip" value="$(optenv JACKAL_LASER_3D_HOST 192.168.131.20)" />
+        <remap from="velodyne_points" to="$(optenv JACKAL_LASER_3D_TOPIC mid/points)" />
+      </include>
+    </group>
   </group>
 
   <!-- Optional front/rear UST-10 lidars mounted to the accessory fenders -->
