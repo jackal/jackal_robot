@@ -26,6 +26,9 @@
   <!-- Translate Sentence messages from the MCU to NavSatFix messages -->
   <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" ns="navsat" />
 
+  <!-- Add namespaces to the frame IDs of the IMU and NavSat messages -->
+  <node pkg="jackal_base" type="sensor_frame_node" name="sensor_frame_node">
+
   <!-- Filter raw gyro data into a usable IMU message -->
   <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter">
     <rosparam file="$(eval optenv('JACKAL_MAG_CONFIG', find('jackal_base')+'/config/mag_config_default.yaml'))" />
