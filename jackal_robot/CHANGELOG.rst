@@ -5,8 +5,8 @@ Changelog for package jackal_robot
 0.6.2 (2021-04-28)
 ------------------
 
-Forthcoming
------------
+0.6.3 (2021-09-29)
+------------------
 * 0.6.2
 * Update the changelogs ahead of release
 * Contributors: Chris Iverach-Brereton

@@ -8,8 +8,8 @@ Changelog for package jackal_bringup
 * Fix a c&p error where and arg was referenced before it was actually assigned
 * Contributors: Chris Iverach-Brereton
 
-Forthcoming
------------
+0.6.3 (2021-09-29)
+------------------
 * Merge pull request `#37 <https://github.com/jackal/jackal_robot/issues/37>`_ from luis-camero/melodic-devel
   Added Velodyne HDL-32E driver launch file to the accessories launch
 * Added Velodyne HDL-32E driver launch file to the accessories launch file under environment variable JACKAL_LASER_3D_MODEL=hdl32e
