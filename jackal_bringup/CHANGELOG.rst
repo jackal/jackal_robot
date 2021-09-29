@@ -8,6 +8,24 @@ Changelog for package jackal_bringup
 * Fix a c&p error where and arg was referenced before it was actually assigned
 * Contributors: Chris Iverach-Brereton
 
+Forthcoming
+-----------
+* Merge pull request `#37 <https://github.com/jackal/jackal_robot/issues/37>`_ from luis-camero/melodic-devel
+  Added Velodyne HDL-32E driver launch file to the accessories launch
+* Added Velodyne HDL-32E driver launch file to the accessories launch file under environment variable JACKAL_LASER_3D_MODEL=hdl32e
+* Add envar support for adding a GX5 family IMU (`#34 <https://github.com/jackal/jackal_robot/issues/34>`_)
+  * Launch the GX5 IMU node if necessary
+  * Change the name of the frame id arg for the IMU to match with the latest ros_mscl
+  * Use the ENU frame instead of NED for the GX5
+* Merge pull request `#32 <https://github.com/jackal/jackal_robot/issues/32>`_ from jackal/rsci-227
+  Set fender lidar angle range
+* Set the max/min angles for the fender lidars to [-pi, pi] to prevent the sensors from seeing the wheels/chassis.  If the robot sees its own wheels it can cause problems with ARK, which is the main use-case for the fender lasers.
+* 0.6.2
+* Update the changelogs ahead of release
+* Fix the name of the VLP16 launch file that gets included in accessories
+* Fix a c&p error where and arg was referenced before it was actually assigned
+* Contributors: Chris I-B, Chris Iverach-Brereton, Luis Camero, Tony Baltovski
+
 0.6.1 (2021-03-08)
 ------------------
 * Add VLP16 support, refactor main/secondary laser envar support (`#27 <https://github.com/jackal/jackal_robot/issues/27>`_)
