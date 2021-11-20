@@ -20,7 +20,7 @@
   <run_depend>nmea_comms</run_depend>
   <run_depend>nmea_navsat_driver</run_depend>
   <run_depend version_gte="0.1.1">robot_upstart</run_depend>
-  <run_depend>ros_mscl</run_depend>
+  <run_depend>microstrain_inertial_driver</run_depend>
 
   <export>
   </export>
