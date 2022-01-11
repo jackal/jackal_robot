@@ -29,3 +29,10 @@ analyzers:
         timeout: 5.0
         expected: [
           'bluetooth_teleop/joy_node: Joystick Driver Status' ]
+      twist:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Twist Mux
+        remove_prefix: 'twist_mux'
+        timeout: 5.0
+        expected: [
+          'twist_mux: Twist mux status']

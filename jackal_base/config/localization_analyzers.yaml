@@ -1,0 +1,10 @@
+analyzers:
+  jackal:
+    type: diagnostic_aggregator/AnalyzerGroup
+    path: Jackal Base
+    analyzers:
+      localization:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Localization
+        find_and_remove_prefix: 'ekf_localization'
+        timeout: 5.0
