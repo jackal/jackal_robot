@@ -2,6 +2,11 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix some ROS lint errors
+* Contributors: Chris Iverach-Brereton
+
 0.7.0 (2021-04-23)
 ------------------
 * Merge development changes from live hardware test into noetic-devel

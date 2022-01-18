@@ -2,6 +2,11 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Removed duplicate Hokuyo fender node launch
+* Contributors: luis-camero
+
 0.7.0 (2021-04-23)
 ------------------
 * Merge development changes from live hardware test into noetic-devel
