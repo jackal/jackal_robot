@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.1 (2022-01-18)
+------------------
 * Fix some ROS lint errors
 * Contributors: Chris Iverach-Brereton
 
