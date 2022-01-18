@@ -5,6 +5,12 @@ Changelog for package jackal_base
 0.6.2 (2021-04-28)
 ------------------
 
+Forthcoming
+-----------
+* Added analyzers for ekf_localization only when enabled
+* Added analyzers to group twist mux
+* Contributors: Luis Camero
+
 0.6.3 (2021-09-29)
 ------------------
 * Merge pull request `#33 <https://github.com/jackal/jackal_robot/issues/33>`_ from ms-iot/init_windows
