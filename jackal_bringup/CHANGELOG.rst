@@ -8,8 +8,8 @@ Changelog for package jackal_bringup
 * Fix a c&p error where and arg was referenced before it was actually assigned
 * Contributors: Chris Iverach-Brereton
 
-Forthcoming
------------
+0.6.4 (2022-01-18)
+------------------
 
 0.6.3 (2021-09-29)
 ------------------
