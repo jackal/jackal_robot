@@ -2,6 +2,12 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Updated Microstrain environment variables
+* Added GX5 to jackal bringup
+* Contributors: Luis Camero
+
 0.7.1 (2022-01-18)
 ------------------
 * Removed duplicate Hokuyo fender node launch

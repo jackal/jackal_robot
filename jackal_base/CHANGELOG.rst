@@ -2,6 +2,11 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add diagnostic analyzers for EKF localization and twist mux
+* Contributors: Luis Camero
+
 0.7.1 (2022-01-18)
 ------------------
 * Fix some ROS lint errors
