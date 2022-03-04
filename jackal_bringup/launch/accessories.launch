@@ -211,11 +211,22 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
 
 
   <!-- Optional GX5 family IMU -->
-  <group if="$(optenv JACKAL_GX5_IMU 0)">
+  <group if="$(optenv JACKAL_IMU_MICROSTRAIN 0)">
     <include file="$(find ros_mscl)/launch/microstrain.launch">
-      <arg name="imu_frame_id"  value="gx5_link" />
-      <arg name="port"          value="$(optenv JACKAL_GX5_IMU_PORT /dev/microstrain)" />
+      <arg name="name"          value="$(optenv JACKAL_IMU_MICROSTRAIN_NAME gx5)" />
+      <arg name="imu_frame_id"  value="$(optenv JACKAL_IMU_MICROSTRAIN_LINK gx5_link)" />
+      <arg name="port"          value="$(optenv JACKAL_IMU_MICROSTRAIN_PORT /dev/microstrain)" />
       <arg name="use_enu_frame" value="true" />
     </include>
+  </group>
+  <group unless="$(optenv JACKAL_IMU_MICROSTRAIN 0)">
+    <group if="$(optenv JACKAL_GX5_IMU 0)">
+      <include file="$(find ros_mscl)/launch/microstrain.launch">
+        <arg name="name"          value="$(optenv JACKAL_IMU_MICROSTRAIN_NAME gx5)" />
+        <arg name="imu_frame_id"  value="$(optenv JACKAL_IMU_MICROSTRAIN_LINK gx5_link)" />
+        <arg name="port"          value="$(optenv JACKAL_GX5_IMU_PORT /dev/microstrain)" />
+        <arg name="use_enu_frame" value="true" />
+      </include>
+    </group>
   </group>
 </launch>
