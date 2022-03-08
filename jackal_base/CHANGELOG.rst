@@ -5,6 +5,9 @@ Changelog for package jackal_base
 0.6.2 (2021-04-28)
 ------------------
 
+Forthcoming
+-----------
+
 0.6.4 (2022-01-18)
 ------------------
 * Added analyzers for ekf_localization only when enabled
