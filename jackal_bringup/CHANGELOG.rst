@@ -2,6 +2,15 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added TIM551 to launch and package.xml
+* Added Hokuyo UTM30 (`#48 <https://github.com/jackal/jackal_robot/issues/48>`_)
+  * Add UTM30 to the bringup launch
+  * Fixed typo in secondary lidar launch
+* [jackal_bringup] Removed unnecessary udev rule.
+* Contributors: Luis Camero, Tony Baltovski, luis-camero
+
 0.7.2 (2022-02-15)
 ------------------
 * Updated Microstrain environment variables
