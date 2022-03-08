@@ -8,8 +8,8 @@ Changelog for package jackal_bringup
 * Fix a c&p error where and arg was referenced before it was actually assigned
 * Contributors: Chris Iverach-Brereton
 
-Forthcoming
------------
+0.6.5 (2022-03-08)
+------------------
 * Updated Microstrain launch to include new variables (`#47 <https://github.com/jackal/jackal_robot/issues/47>`_)
 * [jackal_bringup] Removed unnecessary udev rule.
 * Contributors: Tony Baltovski, luis-camero
