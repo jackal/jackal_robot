@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.3 (2022-03-08)
+------------------
 * Added TIM551 to launch and package.xml
 * Added Hokuyo UTM30 (`#48 <https://github.com/jackal/jackal_robot/issues/48>`_)
   * Add UTM30 to the bringup launch
