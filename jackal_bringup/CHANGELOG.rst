@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.4 (2022-03-11)
+------------------
 * Use python3 for the install script
   Since removing python-is-python3 from the ISO this script appears to fail on a fresh Noetic install.
 * Contributors: Chris I-B
