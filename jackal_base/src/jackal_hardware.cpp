@@ -34,6 +34,8 @@
 #include <boost/assign.hpp>
 #include "jackal_base/jackal_hardware.h"
 
+#include <cmath>
+
 namespace jackal_base
 {
 
