@@ -20,7 +20,14 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
         <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
       </node>
     </group>
-    <group if="$(eval arg('lidar_model') == 'ust10')">
+    <group if="$(eval arg('lidar_model') == 'tim551')">
+      <node pkg="sick_tim" name="tim551" type="sick_tim551_2050001">
+        <param name="hostname" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)"/>
+        <param name="frame_id" value="$(optenv JACKAL_LASER_PREFIX tim551)"/>
+        <remap from="scan" to="$(optenv JACKAL_LASER_TOPIC front/scan)" />
+      </node>
+    </group>
+    <group if="$(eval (arg('lidar_model') == 'ust10') | (arg('lidar_model') == 'utm30'))">
       <node pkg="urg_node" name="hokuyo" type="urg_node">
         <param name="ip_address" value="$(optenv JACKAL_LASER_HOST 192.168.131.20)" />
         <param name="frame_id" value="$(optenv JACKAL_LASER_MOUNT front)_laser" />
@@ -37,10 +44,17 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
         <remap from="scan" to="$(optenv JACKAL_LASER_SECONDARY_TOPIC rear/scan)" />
       </node>
     </group>
-    <group if="$(eval arg('lidar2_model') == 'ust10')">
+    <group if="$(eval arg('lidar2_model') == 'tim551')">
+      <node pkg="sick_tim" name="tim551_2" type="sick_tim551_2050001">
+        <param name="hostname" value="$(optenv JACKAL_LASER_SECONDARY_HOST 192.168.131.20)"/>
+        <param name="frame_id" value="$(optenv JACKAL_LASER_SECONDARY_PREFIX tim551_2)"/>
+        <remap from="scan" to="$(optenv JACKAL_LASER_SECONDARY_TOPIC rear/scan)" />
+      </node>
+    </group>
+    <group if="$(eval (arg('lidar2_model') == 'ust10') | (arg('lidar2_model') == 'utm30'))">
       <node pkg="urg_node" name="hokuyo_2" type="urg_node">
         <param name="ip_address" value="$(optenv JACKAL_LASER_SECONDARY_HOST 192.168.131.21)" />
-        <param name="frame_id" value="$(optenv JACKAL_LASER_SECONDARY_RPY_MOUNT rear)_laser" />
+        <param name="frame_id" value="$(optenv JACKAL_LASER_SECONDARY_MOUNT rear)_laser" />
         <remap from="scan" to="$(optenv JACKAL_LASER_SECONDARY_TOPIC rear/scan)" />
       </node>
     </group>
