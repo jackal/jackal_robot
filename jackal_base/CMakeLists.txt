@@ -24,8 +24,15 @@ set_target_properties(${PROJECT_NAME}_simple_joy_node
   PROPERTIES OUTPUT_NAME simple_joy_node PREFIX "")
 add_dependencies(${PROJECT_NAME}_simple_joy_node jackal_msgs_gencpp)
 
-install(TARGETS jackal_node ${PROJECT_NAME}_simple_joy_node
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+add_executable(sensor_frame_node src/sensor_frame_node.cpp)
+target_link_libraries(sensor_frame_node ${catkin_LIBRARIES})
+
+install(TARGETS
+          jackal_node
+          ${PROJECT_NAME}_simple_joy_node
+          sensor_frame_node
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 install(DIRECTORY launch config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
