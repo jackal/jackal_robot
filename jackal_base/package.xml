@@ -1,53 +1,30 @@
 <?xml version="1.0"?>
-<package>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>jackal_base</name>
-  <version>0.7.4</version>
-  <description>Jackal's mobility and sensor base.</description>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="rkreinin@clearpathrobotics.com">rkreinin</maintainer>
+  <license>TODO: License declaration</license>
 
-  <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
-  <author email="mpurvis@clearpathrobotics.com">Mike Purvis</author>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <license>BSD</license>
-
-  <url type="website">http://wiki.ros.org/Robots/Jackal</url>
-
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>controller_manager</build_depend>
-  <build_depend>diagnostic_updater</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>hardware_interface</build_depend>
-  <build_depend>jackal_msgs</build_depend>
-  <build_depend>nmea_msgs</build_depend>
-  <build_depend>realtime_tools</build_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>roslaunch</build_depend>
-  <build_depend>roslint</build_depend>
-  <build_depend>rosserial_server</build_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>teleop_twist_joy</build_depend>
-  <build_depend>topic_tools</build_depend>
-
-  <run_depend>controller_manager</run_depend>
-  <run_depend>diagnostic_aggregator</run_depend>
-  <run_depend>diagnostic_updater</run_depend>
-  <run_depend>diff_drive_controller</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>imu_filter_madgwick</run_depend>
-  <run_depend version_gte="0.5">jackal_control</run_depend>
-  <run_depend version_gte="0.5">jackal_description</run_depend>
-  <run_depend version_gte="0.5">jackal_msgs</run_depend>
-  <run_depend>nmea_msgs</run_depend>
-  <run_depend>nmea_navsat_driver</run_depend>
-  <run_depend>python3-scipy</run_depend>
-  <run_depend>realtime_tools</run_depend>
-  <run_depend>rosserial_python</run_depend>
-  <run_depend>rosserial_server</run_depend>
-  <run_depend>sensor_msgs</run_depend>
-  <run_depend>teleop_twist_joy</run_depend>
-  <run_depend>tf</run_depend>
-  <run_depend>topic_tools</run_depend>
+  <depend>controller_interface</depend>
+  <depend>controller_manager</depend>
+  <depend>controller_manager_msgs</depend>
+  <depend>hardware_interface</depend>
+  <depend>geometry_msgs</depend>
+  <depend>jackal_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
 
   <export>
+    <build_type>ament_cmake</build_type>
   </export>
 </package>
