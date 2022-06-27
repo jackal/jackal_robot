@@ -64,37 +64,34 @@ void JackalHardware::writeCommandsToHardware()
   */
 void JackalHardware::updateJointsFromHardware()
 {
-  //executor_.spin_node_some(node_);
-  jackal_msgs::msg::Feedback::SharedPtr msg = node_->get_feedback();
-  if (msg) {
-    RCLCPP_INFO(
-      rclcpp::get_logger(HW_NAME),
-      "Received linear distance information (L: %f, R: %f)",
-      msg->drivers[0].measured_travel, msg->drivers[1].measured_travel);
+  jackal_msgs::msg::Feedback msg = node_->get_feedback();
+  RCLCPP_INFO(
+    rclcpp::get_logger(HW_NAME),
+    "Received linear distance information (L: %f, R: %f)",
+    msg.drivers[0].measured_travel, msg.drivers[1].measured_travel);
 
-    for (auto i = 0u; i < hw_states_position_.size(); i++) {
-      double delta = msg->drivers[i].measured_travel -
-        hw_states_position_[i] - hw_states_position_offset_[i];
+  for (auto i = 0u; i < hw_states_position_.size(); i++) {
+    double delta = msg.drivers[i].measured_travel -
+      hw_states_position_[i] - hw_states_position_offset_[i];
 
-      // detect suspiciously large readings, possibly from encoder rollover
-      if (std::abs(delta) < 1.0f) {
-        hw_states_position_[i] += delta;
-      } else {
-        // suspicious! drop this measurement and update the offset for subsequent readings
-        hw_states_position_offset_[i] += delta;
-        RCLCPP_WARN(
-          rclcpp::get_logger(HW_NAME), "Dropping overflow measurement from encoder");
-      }
+    // detect suspiciously large readings, possibly from encoder rollover
+    if (std::abs(delta) < 1.0f) {
+      hw_states_position_[i] += delta;
+    } else {
+      // suspicious! drop this measurement and update the offset for subsequent readings
+      hw_states_position_offset_[i] += delta;
+      RCLCPP_WARN(
+        rclcpp::get_logger(HW_NAME), "Dropping overflow measurement from encoder");
     }
+  }
 
-    RCLCPP_INFO(
-      rclcpp::get_logger(HW_NAME),
-      "Received linear speed information (L: %f, R: %f)",
-      msg->drivers[0].measured_velocity, msg->drivers[1].measured_velocity);
+  RCLCPP_DEBUG(
+    rclcpp::get_logger(HW_NAME),
+    "Received linear speed information (L: %f, R: %f)",
+    msg.drivers[0].measured_velocity, msg.drivers[1].measured_velocity);
 
-    for (auto i = 0u; i < hw_states_velocity_.size(); i++) {
-      hw_states_velocity_[i] = msg->drivers[i].measured_velocity;
-    }
+  for (auto i = 0u; i < hw_states_velocity_.size(); i++) {
+    hw_states_velocity_[i] = msg.drivers[i].measured_velocity;
   }
 }
 
@@ -120,7 +117,6 @@ hardware_interface::return_type JackalHardware::configure(
   polling_timeout_ = std::stod(info_.hardware_parameters["polling_timeout"]);
 
   node_ = std::make_shared<JackalBase>();
-  //executor_.add_node(node_);
 
   //resetTravelOffset();
 
@@ -243,22 +239,22 @@ hardware_interface::return_type JackalHardware::stop()
 
 hardware_interface::return_type JackalHardware::read()
 {
-  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Reading from hardware");
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Reading from hardware");
 
   updateJointsFromHardware();
 
-  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Joints successfully read!");
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Joints successfully read!");
 
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type JackalHardware::write()
 {
-  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Writing to hardware");
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Writing to hardware");
 
   writeCommandsToHardware();
 
-  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Joints successfully written!");
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Joints successfully written!");
 
   return hardware_interface::return_type::OK;
 }

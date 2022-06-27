@@ -34,6 +34,8 @@
 #ifndef JACKAL_BASE_JACKAL_BASE_H
 #define JACKAL_BASE_JACKAL_BASE_H
 
+#include <mutex>
+
 #include "rclcpp/rclcpp.hpp"
 
 #include "jackal_msgs/msg/drive.hpp"
@@ -48,7 +50,7 @@ class JackalBase
   public:
   explicit JackalBase();
   void drive_command(float left_wheel, float right_wheel, int8_t mode);
-  jackal_msgs::msg::Feedback::SharedPtr get_feedback();
+  jackal_msgs::msg::Feedback get_feedback();
 
   private:
   void feedback_callback(const jackal_msgs::msg::Feedback::SharedPtr msg);
@@ -56,7 +58,8 @@ class JackalBase
   rclcpp::Publisher<jackal_msgs::msg::Drive>::SharedPtr drive_pub_;
   rclcpp::Subscription<jackal_msgs::msg::Feedback>::SharedPtr feedback_sub_;
 
-  jackal_msgs::msg::Feedback::SharedPtr feedback_;
+  jackal_msgs::msg::Feedback feedback_;
+  std::mutex feedback_mutex_;
 };
 
 }

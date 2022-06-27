@@ -85,7 +85,6 @@ private:
   void updateJointsFromHardware();
 
   std::shared_ptr<JackalBase> node_;
-  rclcpp::executors::SingleThreadedExecutor executor_;
 
   double polling_timeout_;
   double wheel_diameter_, max_accel_, max_speed_;

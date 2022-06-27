@@ -13,14 +13,14 @@ JackalBase::JackalBase()
   drive_pub_ = create_publisher<jackal_msgs::msg::Drive>(
     "/cmd_drive",
     rclcpp::SensorDataQoS());
-
-  feedback_ = jackal_msgs::msg::Feedback::SharedPtr();
 }
 
 void JackalBase::feedback_callback(const jackal_msgs::msg::Feedback::SharedPtr msg)
 {
   RCLCPP_INFO(get_logger(), "Feedback received\n");
-  feedback_ = msg;
+  feedback_mutex_.lock();
+  feedback_ = *msg;
+  feedback_mutex_.unlock();
 }
 
 void JackalBase::drive_command(float left_wheel, float right_wheel, int8_t mode)
@@ -32,7 +32,11 @@ void JackalBase::drive_command(float left_wheel, float right_wheel, int8_t mode)
   drive_pub_->publish(drive_msg);
 }
 
-jackal_msgs::msg::Feedback::SharedPtr JackalBase::get_feedback()
+jackal_msgs::msg::Feedback JackalBase::get_feedback()
 {
-  return feedback_;
+  jackal_msgs::msg::Feedback msg;
+  feedback_mutex_.lock();
+  msg = feedback_;
+  feedback_mutex_.unlock();
+  return msg;
 }
