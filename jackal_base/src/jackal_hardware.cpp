@@ -42,6 +42,10 @@ static const std::string HW_NAME = "JackalHardware";
 static const std::string LEFT_CMD_JOINT_NAME = "front_left_wheel_joint";
 static const std::string RIGHT_CMD_JOINT_NAME = "front_right_wheel_joint";
 
+/**
+ * @brief Write commanded velocities to the MCU
+ * 
+ */
 void JackalHardware::writeCommandsToHardware()
 {
   double diff_speed_left = hw_commands_[left_cmd_joint_index_];
@@ -58,14 +62,16 @@ void JackalHardware::writeCommandsToHardware()
     mode);
 }
 
-
 /**
-  * Pull latest speed and travel measurements from MCU, and store in joint structure for ros_control
-  */
+ * @brief Pull latest speed and travel measurements from MCU, 
+ * and store in joint structure for ros_control
+ * 
+ */
 void JackalHardware::updateJointsFromHardware()
 {
+  rclcpp::spin_some(node_);
   jackal_msgs::msg::Feedback msg = node_->get_feedback();
-  RCLCPP_INFO(
+  RCLCPP_DEBUG(
     rclcpp::get_logger(HW_NAME),
     "Received linear distance information (L: %f, R: %f)",
     msg.drivers[0].measured_travel, msg.drivers[1].measured_travel);
@@ -111,14 +117,7 @@ hardware_interface::return_type JackalHardware::configure(
   hw_states_velocity_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
-  wheel_diameter_ = std::stod(info_.hardware_parameters["wheel_diameter"]);
-  max_accel_ = std::stod(info_.hardware_parameters["max_accel"]);
-  max_speed_ = std::stod(info_.hardware_parameters["max_speed"]);
-  polling_timeout_ = std::stod(info_.hardware_parameters["polling_timeout"]);
-
   node_ = std::make_shared<JackalBase>();
-
-  //resetTravelOffset();
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
     // JackalHardware has exactly two states and one command interface on each joint

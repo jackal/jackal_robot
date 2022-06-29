@@ -2,6 +2,10 @@
 
 using jackal_base::JackalBase;
 
+/**
+ * @brief Construct a new JackalBase object
+ * 
+ */
 JackalBase::JackalBase()
 : Node("jackal_base")
 {
@@ -15,14 +19,24 @@ JackalBase::JackalBase()
     rclcpp::SensorDataQoS());
 }
 
+/**
+ * @brief Feedback subscription callback
+ * 
+ * @param msg 
+ */
 void JackalBase::feedback_callback(const jackal_msgs::msg::Feedback::SharedPtr msg)
 {
-  RCLCPP_INFO(get_logger(), "Feedback received\n");
-  feedback_mutex_.lock();
+  std::lock_guard<std::mutex> guard(feedback_mutex_);
   feedback_ = *msg;
-  feedback_mutex_.unlock();
 }
 
+/**
+ * @brief Publish Drive message
+ * 
+ * @param left_wheel Left wheel command
+ * @param right_wheel Right wheel command
+ * @param mode Command mode
+ */
 void JackalBase::drive_command(float left_wheel, float right_wheel, int8_t mode)
 {
   jackal_msgs::msg::Drive drive_msg;
@@ -32,11 +46,19 @@ void JackalBase::drive_command(float left_wheel, float right_wheel, int8_t mode)
   drive_pub_->publish(drive_msg);
 }
 
+/**
+ * @brief Get latest feedback message
+ * 
+ * @return jackal_msgs::msg::Feedback message 
+ */
 jackal_msgs::msg::Feedback JackalBase::get_feedback()
 {
   jackal_msgs::msg::Feedback msg;
-  feedback_mutex_.lock();
-  msg = feedback_;
-  feedback_mutex_.unlock();
+
+  {
+    std::lock_guard<std::mutex> guard(feedback_mutex_);
+    msg = feedback_;
+  }
+
   return msg;
 }
