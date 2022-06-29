@@ -3,6 +3,7 @@
  *  \file
  *  \brief      Class representing Jackal hardware
  *  \author     Roni Kreinin <rkreinin@clearpathrobotics.com>
+ *  \author     Tony Baltovski <tbaltovski@clearpathrobotics.com>
  *  \copyright  Copyright (c) 2022, Clearpath Robotics, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,8 +54,8 @@
 namespace jackal_base
 {
 
-class JackalHardware 
-: public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
+class JackalHardware
+  : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(JackalHardware)
@@ -85,9 +86,6 @@ private:
   void updateJointsFromHardware();
 
   std::shared_ptr<JackalBase> node_;
-
-  double polling_timeout_;
-  double wheel_diameter_, max_accel_, max_speed_;
 
   // Store the command for the robot
   std::vector<double> hw_commands_;

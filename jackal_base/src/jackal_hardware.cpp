@@ -3,6 +3,7 @@
  *  \file
  *  \brief      Class representing Jackal hardware
  *  \author     Roni Kreinin <rkreinin@clearpathrobotics.com>
+ *  \author     Tony Baltovski <tbaltovski@clearpathrobotics.com>
  *  \copyright  Copyright (c) 2022, Clearpath Robotics, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
