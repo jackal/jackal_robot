@@ -1,13 +1,36 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.actions import Node
+from launch.actions import SetEnvironmentVariable
+from launch.conditions import LaunchConfigurationEquals
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 
+import xacro.xmlutils 
+
 
 def generate_launch_description():
+    # The base Jackal configuration has no accessories at all,
+    # so nothing need be specified if config==base; the defaults as given
+    # in the URDF suffice to define this config.
+
+    bb2 = SetEnvironmentVariable('JACKAL_BB2', '1',
+                                 condition=LaunchConfigurationEquals('config', 'front_bumblebee2'))
+    flea3 = SetEnvironmentVariable('JACKAL_FLEA3', '1',
+                                   condition=LaunchConfigurationEquals('config', 'front_flea3'))
+
+    # The front_laser configuration of Jackal is sufficient for
+    # basic gmapping and navigation. It is mostly the default
+    # config, but with a SICK LMS100 series LIDAR on the front,
+    # pointing forward.
+    laser = SetEnvironmentVariable('JACKAL_LASER_3D', '1')
+    laser_model = SetEnvironmentVariable('JACKAL_LASER_3D_MODEL', 'hdl32e')
+    laser2 = SetEnvironmentVariable('JACKAL_LASER_SECONDARY', '1')
+
+    accessories_env = SetEnvironmentVariable('JACKAL_URDF_ACCESSORIES', '/home/rkreinin/jackal_ws/src/accessories.urdf.xacro')
+
     # Get URDF via xacro
     robot_description_content = ParameterValue(Command(
         [
@@ -86,8 +109,28 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(PathJoinSubstitution(
         [FindPackageShare('jackal_control'), 'launch', 'teleop_joy.launch.py'])))
 
+    builder = Node(
+        package='cpr_accessories_builder',
+        executable='builder',
+        arguments=['~/jackal_ws/src/config.yaml', '~/jackal_ws/src/accessories.urdf.xacro'],
+        output='screen',
+    )
+
+    rviz = Node(
+        package='rviz2',
+        executable='rviz2',
+        output='screen'
+    )
+
     ld = LaunchDescription()
-    ld.add_action(micro_ros_agent)
+    #ld.add_action(bb2)
+    #ld.add_action(flea3)
+    #ld.add_action(laser)
+    #ld.add_action(laser_model)
+    #ld.add_action(laser2)
+    #ld.add_action(micro_ros_agent)
+    ld.add_action(accessories_env)
+    #ld.add_action(builder)
     ld.add_action(node_robot_state_publisher)
     ld.add_action(node_controller_manager)
     ld.add_action(spawn_controller)
@@ -95,5 +138,5 @@ def generate_launch_description():
     ld.add_action(launch_jackal_control)
     ld.add_action(launch_jackal_teleop_base)
     ld.add_action(launch_jackal_teleop_joy)
-
+    ld.add_action(rviz)
     return ld
