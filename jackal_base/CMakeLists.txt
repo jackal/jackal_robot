@@ -34,7 +34,7 @@ add_library(
   jackal_hardware
   SHARED
   src/jackal_hardware.cpp
-  src/jackal_base.cpp
+  src/jackal_hardware_interface.cpp
 )
 
 target_include_directories(
@@ -50,7 +50,6 @@ ament_target_dependencies(
   pluginlib
   rclcpp
 )
-
 
 pluginlib_export_plugin_description_file(hardware_interface jackal_hardware.xml)
 

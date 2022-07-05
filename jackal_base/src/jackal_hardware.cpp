@@ -118,7 +118,7 @@ hardware_interface::return_type JackalHardware::configure(
   hw_states_velocity_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
-  node_ = std::make_shared<JackalBase>();
+  node_ = std::make_shared<JackalHardwareInterface>();
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints) {
     // JackalHardware has exactly two states and one command interface on each joint

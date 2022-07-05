@@ -48,7 +48,7 @@
 #include "hardware_interface/types/hardware_interface_status_values.hpp"
 #include "hardware_interface/visibility_control.h"
 
-#include "jackal_base.hpp"
+#include "jackal_hardware_interface.hpp"
 
 
 namespace jackal_base
@@ -85,7 +85,7 @@ private:
   void writeCommandsToHardware();
   void updateJointsFromHardware();
 
-  std::shared_ptr<JackalBase> node_;
+  std::shared_ptr<JackalHardwareInterface> node_;
 
   // Store the command for the robot
   std::vector<double> hw_commands_;

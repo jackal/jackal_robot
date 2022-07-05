@@ -45,11 +45,11 @@
 namespace jackal_base
 {
 
-class JackalBase
+class JackalHardwareInterface
 : public rclcpp::Node
 {
   public:
-  explicit JackalBase();
+  explicit JackalHardwareInterface();
   void drive_command(float left_wheel, float right_wheel, int8_t mode);
   jackal_msgs::msg::Feedback get_feedback();
 

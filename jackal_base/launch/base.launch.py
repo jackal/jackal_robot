@@ -66,7 +66,7 @@ def generate_launch_description():
     micro_ros_agent = Node(
         package='micro_ros_agent',
         executable='micro_ros_agent',
-        arguments=['serial', '--dev', '/dev/ttyACM0'],
+        arguments=['serial', '--dev', '/dev/jackal'],
         output='screen',
     )
 
