@@ -52,15 +52,14 @@ void JackalHardware::writeCommandsToHardware()
   double diff_speed_left = hw_commands_[left_cmd_joint_index_];
   double diff_speed_right = hw_commands_[right_cmd_joint_index_];
 
-  int8_t mode = jackal_msgs::msg::Drive::MODE_VELOCITY;
-
   if (std::abs(diff_speed_left) < 0.01 && std::abs(diff_speed_right) < 0.01) {
-    mode = jackal_msgs::msg::Drive::MODE_NONE;
+    diff_speed_left = diff_speed_right = 0.0;
   }
 
   node_->drive_command(
-    static_cast<float>(diff_speed_left), static_cast<float>(diff_speed_right),
-    mode);
+    static_cast<float>(diff_speed_left),
+    static_cast<float>(diff_speed_right),
+    jackal_msgs::msg::Drive::MODE_VELOCITY);
 }
 
 /**
