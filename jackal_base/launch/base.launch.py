@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.actions import Node
@@ -7,7 +7,7 @@ from launch.actions import SetEnvironmentVariable
 from launch.conditions import LaunchConfigurationEquals
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
-
+from launch.event_handlers import OnProcessExit
 import xacro.xmlutils 
 
 
@@ -28,6 +28,10 @@ def generate_launch_description():
     laser = SetEnvironmentVariable('JACKAL_LASER_3D', '1')
     laser_model = SetEnvironmentVariable('JACKAL_LASER_3D_MODEL', 'hdl32e')
     laser2 = SetEnvironmentVariable('JACKAL_LASER_SECONDARY', '1')
+
+    config_arg = DeclareLaunchArgument('config', default_value='/home/rkreinin/jackal_ws/src/config_1.yaml')
+
+    config_file = LaunchConfiguration('config')
 
     accessories_env = SetEnvironmentVariable('JACKAL_URDF_ACCESSORIES', '/home/rkreinin/jackal_ws/src/accessories.urdf.xacro')
 
@@ -112,7 +116,7 @@ def generate_launch_description():
     builder = Node(
         package='cpr_accessories_builder',
         executable='builder',
-        arguments=['~/jackal_ws/src/config.yaml', '~/jackal_ws/src/accessories.urdf.xacro'],
+        arguments=[config_file, '/home/rkreinin/jackal_ws/src/accessories.urdf.xacro'],
         output='screen',
     )
 
@@ -122,6 +126,20 @@ def generate_launch_description():
         output='screen'
     )
 
+    build_event = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=builder,
+            on_exit=[node_robot_state_publisher,
+                     node_controller_manager,
+                     spawn_controller,
+                     spawn_jackal_velocity_controller,
+                     launch_jackal_control,
+                     launch_jackal_teleop_base,
+                     launch_jackal_teleop_joy,
+                     rviz]))
+
+    
+
     ld = LaunchDescription()
     #ld.add_action(bb2)
     #ld.add_action(flea3)
@@ -129,14 +147,16 @@ def generate_launch_description():
     #ld.add_action(laser_model)
     #ld.add_action(laser2)
     #ld.add_action(micro_ros_agent)
+    ld.add_action(config_arg)
     ld.add_action(accessories_env)
-    #ld.add_action(builder)
-    ld.add_action(node_robot_state_publisher)
-    ld.add_action(node_controller_manager)
-    ld.add_action(spawn_controller)
-    ld.add_action(spawn_jackal_velocity_controller)
-    ld.add_action(launch_jackal_control)
-    ld.add_action(launch_jackal_teleop_base)
-    ld.add_action(launch_jackal_teleop_joy)
-    ld.add_action(rviz)
+    ld.add_action(build_event)
+    ld.add_action(builder)
+    # ld.add_action(node_robot_state_publisher)
+    # ld.add_action(node_controller_manager)
+    # ld.add_action(spawn_controller)
+    # ld.add_action(spawn_jackal_velocity_controller)
+    # ld.add_action(launch_jackal_control)
+    # ld.add_action(launch_jackal_teleop_base)
+    # ld.add_action(launch_jackal_teleop_joy)
+    # ld.add_action(rviz)
     return ld
