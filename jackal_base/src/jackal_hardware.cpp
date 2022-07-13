@@ -2,8 +2,9 @@
  *
  *  \file
  *  \brief      Class representing Jackal hardware
- *  \author     Mike Purvis <mpurvis@clearpathrobotics.com>
- *  \copyright  Copyright (c) 2013, Clearpath Robotics, Inc.
+ *  \author     Roni Kreinin <rkreinin@clearpathrobotics.com>
+ *  \author     Tony Baltovski <tbaltovski@clearpathrobotics.com>
+ *  \copyright  Copyright (c) 2022, Clearpath Robotics, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,78 +32,234 @@
  *
  */
 
-#include <boost/assign.hpp>
-#include "jackal_base/jackal_hardware.h"
+#include "jackal_base/jackal_hardware.hpp"
+#include "jackal_msgs/msg/feedback.hpp"
+#include "hardware_interface/types/hardware_interface_type_values.hpp"
 
 namespace jackal_base
 {
 
-JackalHardware::JackalHardware()
+static const std::string HW_NAME = "JackalHardware";
+static const std::string LEFT_CMD_JOINT_NAME = "front_left_wheel_joint";
+static const std::string RIGHT_CMD_JOINT_NAME = "front_right_wheel_joint";
+
+/**
+ * @brief Write commanded velocities to the MCU
+ * 
+ */
+void JackalHardware::writeCommandsToHardware()
 {
-  ros::V_string joint_names = boost::assign::list_of("front_left_wheel")
-      ("front_right_wheel")("rear_left_wheel")("rear_right_wheel");
+  double diff_speed_left = hw_commands_[left_cmd_joint_index_];
+  double diff_speed_right = hw_commands_[right_cmd_joint_index_];
 
-  for (unsigned int i = 0; i < joint_names.size(); i++)
-  {
-    hardware_interface::JointStateHandle joint_state_handle(joint_names[i],
-        &joints_[i].position, &joints_[i].velocity, &joints_[i].effort);
-    joint_state_interface_.registerHandle(joint_state_handle);
-
-    hardware_interface::JointHandle joint_handle(
-        joint_state_handle, &joints_[i].velocity_command);
-    velocity_joint_interface_.registerHandle(joint_handle);
+  if (std::abs(diff_speed_left) < 0.01 && std::abs(diff_speed_right) < 0.01) {
+    diff_speed_left = diff_speed_right = 0.0;
   }
-  registerInterface(&joint_state_interface_);
-  registerInterface(&velocity_joint_interface_);
 
-  feedback_sub_ = nh_.subscribe("feedback", 1, &JackalHardware::feedbackCallback, this);
-
-  // Realtime publisher, initializes differently from regular ros::Publisher
-  cmd_drive_pub_.init(nh_, "cmd_drive", 1);
+  node_->drive_command(
+    static_cast<float>(diff_speed_left),
+    static_cast<float>(diff_speed_right),
+    jackal_msgs::msg::Drive::MODE_VELOCITY);
 }
 
 /**
- * Populates the internal joint state struct from the most recent Feedback message
- * received from the MCU.
- *
- * Called from the controller thread.
+ * @brief Pull latest speed and travel measurements from MCU, 
+ * and store in joint structure for ros_control
+ * 
  */
-void JackalHardware::copyJointsFromHardware()
+void JackalHardware::updateJointsFromHardware()
 {
-  boost::mutex::scoped_lock feedback_msg_lock(feedback_msg_mutex_, boost::try_to_lock);
-  if (feedback_msg_ && feedback_msg_lock)
-  {
-    for (int i = 0; i < 4; i++)
-    {
-      joints_[i].position = feedback_msg_->drivers[i % 2].measured_travel;
-      joints_[i].velocity = feedback_msg_->drivers[i % 2].measured_velocity;
-      joints_[i].effort = 0;  // TODO(mikepurvis): determine this from amperage data.
+  rclcpp::spin_some(node_);
+  jackal_msgs::msg::Feedback msg = node_->get_feedback();
+  RCLCPP_DEBUG(
+    rclcpp::get_logger(HW_NAME),
+    "Received linear distance information (L: %f, R: %f)",
+    msg.drivers[0].measured_travel, msg.drivers[1].measured_travel);
+
+  for (auto i = 0u; i < hw_states_position_.size(); i++) {
+    double delta = msg.drivers[i].measured_travel -
+      hw_states_position_[i] - hw_states_position_offset_[i];
+
+    // detect suspiciously large readings, possibly from encoder rollover
+    if (std::abs(delta) < 1.0f) {
+      hw_states_position_[i] += delta;
+    } else {
+      // suspicious! drop this measurement and update the offset for subsequent readings
+      hw_states_position_offset_[i] += delta;
+      RCLCPP_WARN(
+        rclcpp::get_logger(HW_NAME), "Dropping overflow measurement from encoder");
     }
   }
-}
 
-/**
- * Populates and publishes Drive message based on the controller outputs.
- *
- * Called from the controller thread.
- */
-void JackalHardware::publishDriveFromController()
-{
-  if (cmd_drive_pub_.trylock())
-  {
-    cmd_drive_pub_.msg_.mode = jackal_msgs::Drive::MODE_VELOCITY;
-    cmd_drive_pub_.msg_.drivers[jackal_msgs::Drive::LEFT] = joints_[0].velocity_command;
-    cmd_drive_pub_.msg_.drivers[jackal_msgs::Drive::RIGHT] = joints_[1].velocity_command;
-    cmd_drive_pub_.unlockAndPublish();
+  RCLCPP_DEBUG(
+    rclcpp::get_logger(HW_NAME),
+    "Received linear speed information (L: %f, R: %f)",
+    msg.drivers[0].measured_velocity, msg.drivers[1].measured_velocity);
+
+  for (auto i = 0u; i < hw_states_velocity_.size(); i++) {
+    hw_states_velocity_[i] = msg.drivers[i].measured_velocity;
   }
 }
 
-void JackalHardware::feedbackCallback(const jackal_msgs::Feedback::ConstPtr& msg)
+hardware_interface::return_type JackalHardware::configure(
+  const hardware_interface::HardwareInfo & info)
 {
-  // Update the feedback message pointer to point to the current message. Block
-  // until the control thread is not using the lock.
-  boost::mutex::scoped_lock lock(feedback_msg_mutex_);
-  feedback_msg_ = msg;
+  if (configure_default(info) != hardware_interface::return_type::OK) {
+    return hardware_interface::return_type::ERROR;
+  }
+
+  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Name: %s", info_.name.c_str());
+
+  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Number of Joints %u", info_.joints.size());
+
+  hw_states_position_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_states_position_offset_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_states_velocity_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+
+  node_ = std::make_shared<JackalHardwareInterface>();
+
+  for (const hardware_interface::ComponentInfo & joint : info_.joints) {
+    // JackalHardware has exactly two states and one command interface on each joint
+    if (joint.command_interfaces.size() != 1) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger(HW_NAME),
+        "Joint '%s' has %d command interfaces found. 1 expected.", joint.name.c_str(),
+        joint.command_interfaces.size());
+      return hardware_interface::return_type::ERROR;
+    }
+
+    if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger(HW_NAME),
+        "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
+        joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
+      return hardware_interface::return_type::ERROR;
+    }
+
+    if (joint.state_interfaces.size() != 2) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger(HW_NAME),
+        "Joint '%s' has %d state interface. 2 expected.", joint.name.c_str(),
+        joint.state_interfaces.size());
+      return hardware_interface::return_type::ERROR;
+    }
+
+    if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger(HW_NAME),
+        "Joint '%s' have '%s' as first state interface. '%s' and '%s' expected.",
+        joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
+        hardware_interface::HW_IF_POSITION);
+      return hardware_interface::return_type::ERROR;
+    }
+
+    if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY) {
+      RCLCPP_FATAL(
+        rclcpp::get_logger(HW_NAME),
+        "Joint '%s' have '%s' as second state interface. '%s' expected.", joint.name.c_str(),
+        joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_VELOCITY);
+      return hardware_interface::return_type::ERROR;
+    }
+  }
+
+  status_ = hardware_interface::status::CONFIGURED;
+  return hardware_interface::return_type::OK;
+}
+
+std::vector<hardware_interface::StateInterface> JackalHardware::export_state_interfaces()
+{
+  std::vector<hardware_interface::StateInterface> state_interfaces;
+  for (auto i = 0u; i < info_.joints.size(); i++) {
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_position_[i]));
+    state_interfaces.emplace_back(
+      hardware_interface::StateInterface(
+        info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_states_velocity_[i]));
+  }
+
+  return state_interfaces;
+}
+
+std::vector<hardware_interface::CommandInterface> JackalHardware::export_command_interfaces()
+{
+  std::vector<hardware_interface::CommandInterface> command_interfaces;
+
+  for (auto i = 0u; i < info_.joints.size(); i++) {
+    command_interfaces.emplace_back(
+      hardware_interface::CommandInterface(
+        info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
+
+    // Detmerine which joints will be used for commands since Jackal only has two motors
+    if (info_.joints[i].name == LEFT_CMD_JOINT_NAME) {
+      left_cmd_joint_index_ = i;
+    }
+
+    if (info_.joints[i].name == RIGHT_CMD_JOINT_NAME) {
+      right_cmd_joint_index_ = i;
+    }
+  }
+
+  return command_interfaces;
+}
+
+hardware_interface::return_type JackalHardware::start()
+{
+  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Starting ...please wait...");
+
+  // set some default values
+  for (auto i = 0u; i < hw_states_position_.size(); i++) {
+    if (std::isnan(hw_states_position_[i])) {
+      hw_states_position_[i] = 0;
+      hw_states_position_offset_[i] = 0;
+      hw_states_velocity_[i] = 0;
+      hw_commands_[i] = 0;
+    }
+  }
+
+  status_ = hardware_interface::status::STARTED;
+
+  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "System Successfully started!");
+
+  return hardware_interface::return_type::OK;
+}
+
+hardware_interface::return_type JackalHardware::stop()
+{
+  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Stopping ...please wait...");
+
+  status_ = hardware_interface::status::STOPPED;
+
+  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "System successfully stopped!");
+
+  return hardware_interface::return_type::OK;
+}
+
+hardware_interface::return_type JackalHardware::read()
+{
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Reading from hardware");
+
+  updateJointsFromHardware();
+
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Joints successfully read!");
+
+  return hardware_interface::return_type::OK;
+}
+
+hardware_interface::return_type JackalHardware::write()
+{
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Writing to hardware");
+
+  writeCommandsToHardware();
+
+  RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Joints successfully written!");
+
+  return hardware_interface::return_type::OK;
 }
 
 }  // namespace jackal_base
+
+#include "pluginlib/class_list_macros.hpp"
+PLUGINLIB_EXPORT_CLASS(
+  jackal_base::JackalHardware, hardware_interface::SystemInterface)

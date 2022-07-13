@@ -2,8 +2,9 @@
  *
  *  \file
  *  \brief      Class representing Jackal hardware
- *  \author     Mike Purvis <mpurvis@clearpathrobotics.com>
- *  \copyright  Copyright (c) 2013, Clearpath Robotics, Inc.
+ *  \author     Roni Kreinin <rkreinin@clearpathrobotics.com>
+ *  \author     Tony Baltovski <tbaltovski@clearpathrobotics.com>
+ *  \copyright  Copyright (c) 2022, Clearpath Robotics, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,54 +35,63 @@
 #ifndef JACKAL_BASE_JACKAL_HARDWARE_H
 #define JACKAL_BASE_JACKAL_HARDWARE_H
 
-#include "boost/thread.hpp"
-#include "hardware_interface/joint_state_interface.h"
-#include "hardware_interface/joint_command_interface.h"
-#include "hardware_interface/robot_hw.h"
-#include "jackal_msgs/Drive.h"
-#include "jackal_msgs/Feedback.h"
-#include "realtime_tools/realtime_publisher.h"
-#include "ros/ros.h"
-#include "sensor_msgs/JointState.h"
+#include <memory>
+#include <string>
+#include <vector>
+#include <chrono>
+
+#include "hardware_interface/base_interface.hpp"
+#include "hardware_interface/handle.hpp"
+#include "hardware_interface/hardware_info.hpp"
+#include "hardware_interface/system_interface.hpp"
+#include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "hardware_interface/types/hardware_interface_status_values.hpp"
+#include "hardware_interface/visibility_control.h"
+
+#include "jackal_hardware_interface.hpp"
 
 
 namespace jackal_base
 {
 
-class JackalHardware : public hardware_interface::RobotHW
+class JackalHardware
+  : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
-  JackalHardware();
-  void copyJointsFromHardware();
-  void publishDriveFromController();
+  RCLCPP_SHARED_PTR_DEFINITIONS(JackalHardware)
+
+  HARDWARE_INTERFACE_PUBLIC
+  hardware_interface::return_type configure(const hardware_interface::HardwareInfo & info) override;
+
+  HARDWARE_INTERFACE_PUBLIC
+  std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+
+  HARDWARE_INTERFACE_PUBLIC
+  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+
+  HARDWARE_INTERFACE_PUBLIC
+  hardware_interface::return_type start() override;
+
+  HARDWARE_INTERFACE_PUBLIC
+  hardware_interface::return_type stop() override;
+
+  HARDWARE_INTERFACE_PUBLIC
+  hardware_interface::return_type read() override;
+
+  HARDWARE_INTERFACE_PUBLIC
+  hardware_interface::return_type write() override;
 
 private:
-  void feedbackCallback(const jackal_msgs::Feedback::ConstPtr& msg);
+  void writeCommandsToHardware();
+  void updateJointsFromHardware();
 
-  ros::NodeHandle nh_;
-  ros::Subscriber feedback_sub_;
-  realtime_tools::RealtimePublisher<jackal_msgs::Drive> cmd_drive_pub_;
+  std::shared_ptr<JackalHardwareInterface> node_;
 
-  hardware_interface::JointStateInterface joint_state_interface_;
-  hardware_interface::VelocityJointInterface velocity_joint_interface_;
+  // Store the command for the robot
+  std::vector<double> hw_commands_;
+  std::vector<double> hw_states_position_, hw_states_position_offset_, hw_states_velocity_;
 
-  // These are mutated on the controls thread only.
-  struct Joint
-  {
-    double position;
-    double velocity;
-    double effort;
-    double velocity_command;
-
-    Joint() : position(0), velocity(0), effort(0), velocity_command(0)
-    {
-    }
-  }
-  joints_[4];
-
-  // This pointer is set from the ROS thread.
-  jackal_msgs::Feedback::ConstPtr feedback_msg_;
-  boost::mutex feedback_msg_mutex_;
+  uint8_t left_cmd_joint_index_, right_cmd_joint_index_;
 };
 
 }  // namespace jackal_base
