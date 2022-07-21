@@ -42,6 +42,8 @@ namespace jackal_base
 static const std::string HW_NAME = "JackalHardware";
 static const std::string LEFT_CMD_JOINT_NAME = "front_left_wheel_joint";
 static const std::string RIGHT_CMD_JOINT_NAME = "front_right_wheel_joint";
+static const std::string LEFT_ALT_JOINT_NAME = "rear_left_wheel_joint";
+static const std::string RIGHT_ALT_JOINT_NAME = "rear_right_wheel_joint";
 
 /**
  * @brief Write commanded velocities to the MCU
@@ -76,8 +78,13 @@ void JackalHardware::updateJointsFromHardware()
     "Received linear distance information (L: %f, R: %f)",
     msg.drivers[0].measured_travel, msg.drivers[1].measured_travel);
 
+  auto side = jackal_msgs::msg::Drive::LEFT;
   for (auto i = 0u; i < hw_states_position_.size(); i++) {
-    double delta = msg.drivers[i].measured_travel -
+    if (i == right_cmd_joint_index_ || i == right_alt_joint_index_){
+      side = jackal_msgs::msg::Drive::RIGHT;
+    }
+
+    double delta = msg.drivers[side].measured_travel -
       hw_states_position_[i] - hw_states_position_offset_[i];
 
     // detect suspiciously large readings, possibly from encoder rollover
@@ -195,9 +202,14 @@ std::vector<hardware_interface::CommandInterface> JackalHardware::export_command
     if (info_.joints[i].name == LEFT_CMD_JOINT_NAME) {
       left_cmd_joint_index_ = i;
     }
-
-    if (info_.joints[i].name == RIGHT_CMD_JOINT_NAME) {
+    else if (info_.joints[i].name == LEFT_ALT_JOINT_NAME) {
+      left_alt_joint_index_ = i;
+    }
+    else if (info_.joints[i].name == RIGHT_CMD_JOINT_NAME) {
       right_cmd_joint_index_ = i;
+    }
+    else if (info_.joints[i].name == RIGHT_ALT_JOINT_NAME) {
+      right_alt_joint_index_ = i;
     }
   }
 

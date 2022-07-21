@@ -92,6 +92,7 @@ private:
   std::vector<double> hw_states_position_, hw_states_position_offset_, hw_states_velocity_;
 
   uint8_t left_cmd_joint_index_, right_cmd_joint_index_;
+  uint8_t left_alt_joint_index_, right_alt_joint_index_;
 };
 
 }  // namespace jackal_base
