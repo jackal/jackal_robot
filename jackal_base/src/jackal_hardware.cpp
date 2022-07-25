@@ -51,8 +51,8 @@ static const std::string RIGHT_ALT_JOINT_NAME = "rear_right_wheel_joint";
  */
 void JackalHardware::writeCommandsToHardware()
 {
-  double diff_speed_left = hw_commands_[left_cmd_joint_index_];
-  double diff_speed_right = hw_commands_[right_cmd_joint_index_];
+  double diff_speed_left = hw_commands_[wheel_joints_[LEFT_CMD_JOINT_NAME]];
+  double diff_speed_right = hw_commands_[wheel_joints_[RIGHT_CMD_JOINT_NAME]];
 
   if (std::abs(diff_speed_left) < 0.01 && std::abs(diff_speed_right) < 0.01) {
     diff_speed_left = diff_speed_right = 0.0;
@@ -80,7 +80,7 @@ void JackalHardware::updateJointsFromHardware()
 
   auto side = jackal_msgs::msg::Drive::LEFT;
   for (auto i = 0u; i < hw_states_position_.size(); i++) {
-    if (i == right_cmd_joint_index_ || i == right_alt_joint_index_){
+    if (i == wheel_joints_[RIGHT_ALT_JOINT_NAME] || i == wheel_joints_[RIGHT_CMD_JOINT_NAME]){
       side = jackal_msgs::msg::Drive::RIGHT;
     }
 
@@ -198,19 +198,8 @@ std::vector<hardware_interface::CommandInterface> JackalHardware::export_command
       hardware_interface::CommandInterface(
         info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
 
-    // Detmerine which joints will be used for commands since Jackal only has two motors
-    if (info_.joints[i].name == LEFT_CMD_JOINT_NAME) {
-      left_cmd_joint_index_ = i;
-    }
-    else if (info_.joints[i].name == LEFT_ALT_JOINT_NAME) {
-      left_alt_joint_index_ = i;
-    }
-    else if (info_.joints[i].name == RIGHT_CMD_JOINT_NAME) {
-      right_cmd_joint_index_ = i;
-    }
-    else if (info_.joints[i].name == RIGHT_ALT_JOINT_NAME) {
-      right_alt_joint_index_ = i;
-    }
+    // Map wheel joint name to index
+    wheel_joints_[info_.joints[i].name] = i;
   }
 
   return command_interfaces;
