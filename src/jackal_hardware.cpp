@@ -83,6 +83,9 @@ void JackalHardware::updateJointsFromHardware()
     if (i == wheel_joints_[RIGHT_ALT_JOINT_NAME] || i == wheel_joints_[RIGHT_CMD_JOINT_NAME]){
       side = jackal_msgs::msg::Drive::RIGHT;
     }
+    else {
+      side = jackal_msgs::msg::Drive::LEFT;
+    }
 
     double delta = msg.drivers[side].measured_travel -
       hw_states_position_[i] - hw_states_position_offset_[i];
@@ -96,15 +99,9 @@ void JackalHardware::updateJointsFromHardware()
       RCLCPP_WARN(
         rclcpp::get_logger(HW_NAME), "Dropping overflow measurement from encoder");
     }
-  }
 
-  RCLCPP_DEBUG(
-    rclcpp::get_logger(HW_NAME),
-    "Received linear speed information (L: %f, R: %f)",
-    msg.drivers[0].measured_velocity, msg.drivers[1].measured_velocity);
-
-  for (auto i = 0u; i < hw_states_velocity_.size(); i++) {
-    hw_states_velocity_[i] = msg.drivers[i].measured_velocity;
+    // Velocities
+    hw_states_velocity_[i] = msg.drivers[side].measured_velocity;
   }
 }
 
