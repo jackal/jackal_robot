@@ -32,8 +32,8 @@
  *
  */
 
-#ifndef JACKAL_BASE_JACKAL_HARDWARE_H
-#define JACKAL_BASE_JACKAL_HARDWARE_H
+#ifndef JACKAL_HARDWARE_JACKAL_HARDWARE_H
+#define JACKAL_HARDWARE_JACKAL_HARDWARE_H
 
 #include <memory>
 #include <string>
@@ -51,7 +51,7 @@
 #include "jackal_hardware_interface.hpp"
 
 
-namespace jackal_base
+namespace jackal_hardware
 {
 
 class JackalHardware
@@ -91,9 +91,9 @@ private:
   std::vector<double> hw_commands_;
   std::vector<double> hw_states_position_, hw_states_position_offset_, hw_states_velocity_;
 
-  uint8_t left_cmd_joint_index_, right_cmd_joint_index_;
+  std::map<std::string, uint8_t> wheel_joints_;
 };
 
-}  // namespace jackal_base
+}  // namespace jackal_hardware
 
-#endif  // JACKAL_BASE_JACKAL_HARDWARE_H
+#endif  // JACKAL_HARDWARE_JACKAL_HARDWARE_H

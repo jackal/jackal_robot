@@ -1,6 +1,6 @@
 <library path="jackal_hardware">
-    <class name="jackal_base/JackalHardware"
-           type="jackal_base::JackalHardware"
+    <class name="jackal_hardware/JackalHardware"
+           type="jackal_hardware::JackalHardware"
            base_class_type="hardware_interface::SystemInterface">
       <description>
         The ros2_control JackalHardware using a system hardware interface-type.

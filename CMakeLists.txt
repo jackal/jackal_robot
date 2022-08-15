@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(jackal_base)
+project(jackal_robot)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
