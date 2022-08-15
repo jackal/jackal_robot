@@ -11,22 +11,6 @@ from launch.event_handlers import OnProcessExit
 
 
 def generate_launch_description():
-    # The base Jackal configuration has no accessories at all,
-    # so nothing need be specified if config==base; the defaults as given
-    # in the URDF suffice to define this config.
-
-    bb2 = SetEnvironmentVariable('JACKAL_BB2', '1',
-                                 condition=LaunchConfigurationEquals('config', 'front_bumblebee2'))
-    flea3 = SetEnvironmentVariable('JACKAL_FLEA3', '1',
-                                   condition=LaunchConfigurationEquals('config', 'front_flea3'))
-
-    # The front_laser configuration of Jackal is sufficient for
-    # basic gmapping and navigation. It is mostly the default
-    # config, but with a SICK LMS100 series LIDAR on the front,
-    # pointing forward.
-    laser = SetEnvironmentVariable('JACKAL_LASER_3D', '1')
-    laser_model = SetEnvironmentVariable('JACKAL_LASER_3D_MODEL', 'hdl32e')
-    laser2 = SetEnvironmentVariable('JACKAL_LASER_SECONDARY', '1')
 
     config_file_arg = DeclareLaunchArgument('config_file',
                                        default_value=PathJoinSubstitution(
@@ -47,11 +31,8 @@ def generate_launch_description():
                 [FindPackageShare('jackal_description'), 'urdf', 'jackal.urdf.xacro']
             ),
             ' ',
-            'name:=jackal',
-            ' ',
             'accessories:=',
             PathJoinSubstitution([accessories_path, 'accessories.urdf.xacro']),
-            ' ',
         ]
     ), value_type=str)
 
