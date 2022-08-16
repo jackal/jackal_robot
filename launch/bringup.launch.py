@@ -47,6 +47,13 @@ def generate_launch_description():
             launch_arguments=[('robot_description_command', robot_description_command)]
         ),
 
+        # Accessories
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(PathJoinSubstitution(
+                [FindPackageShare('jackal_robot'), 'launch', 'accessories.launch.py']
+            ))
+        ),
+
         # Base Teleop
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(PathJoinSubstitution(
