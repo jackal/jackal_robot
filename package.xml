@@ -24,6 +24,16 @@
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
 
+  <exec_depend>jackal_control</exec_depend>
+  <exec_depend>jackal_description</exec_depend>
+  <exec_depend>microstrain_inertial_driver</exec_depend>
+  <exec_depend>micro_ros_agent</exec_depend>
+  <exec_depend>urg_node</exec_depend>
+  <exec_depend>velodyne_driver</exec_depend>
+  <exec_depend>velodyne_pointcloud</exec_depend>
+  <exec_depend>wireless_watcher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>
