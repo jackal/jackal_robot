@@ -68,6 +68,11 @@ install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(
+  PROGRAMS scripts/install scripts/uninstall
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 
 ## EXPORTS
 ament_export_include_directories(

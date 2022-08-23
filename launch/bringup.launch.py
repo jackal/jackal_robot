@@ -1,15 +1,10 @@
-import os
-
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler, GroupAction
+from launch.actions import GroupAction, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import FindExecutable, PathJoinSubstitution
+
 from launch_ros.actions import Node
-from launch.actions import SetEnvironmentVariable
-from launch.conditions import LaunchConfigurationEquals
 from launch_ros.substitutions import FindPackageShare
-from launch_ros.parameter_descriptions import ParameterValue
-from launch.event_handlers import OnProcessExit
 
 
 def generate_launch_description():
@@ -23,7 +18,6 @@ def generate_launch_description():
             ),
             ' ',
         ]
-
 
     jackal_bringup_group_action = GroupAction([
 

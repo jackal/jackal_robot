@@ -1,10 +1,10 @@
 import yaml
 
-
 from launch import LaunchContext, LaunchDescription
 from launch.substitutions import EnvironmentVariable, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+
 
 def generate_launch_description():
     lc = LaunchContext()
@@ -204,4 +204,3 @@ def generate_launch_description():
             ld.add_action(node_microstrain_driver)
 
     return ld
-
