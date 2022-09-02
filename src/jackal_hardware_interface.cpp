@@ -32,16 +32,16 @@
  *
  */
 
-#include "jackal_base/jackal_hardware_interface.hpp"
+#include "jackal_hardware/jackal_hardware_interface.hpp"
 
-using jackal_base::JackalHardwareInterface;
+using jackal_hardware::JackalHardwareInterface;
 
 /**
  * @brief Construct a new JackalHardwareInterface object
  * 
  */
 JackalHardwareInterface::JackalHardwareInterface()
-: Node("jackal_base")
+: Node("jackal_hardware")
 {
   feedback_sub_ = create_subscription<jackal_msgs::msg::Feedback>(
     "feedback",

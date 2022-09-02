@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>jackal_base</name>
+  <name>jackal_robot</name>
   <version>0.7.4</version>
   <description>Jackal's mobility and sensor base.</description>
   <maintainer email="rkreinin@clearpathrobotics.com">rkreinin</maintainer>
@@ -23,6 +23,16 @@
   <depend>std_srvs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
+
+  <exec_depend>jackal_control</exec_depend>
+  <exec_depend>jackal_description</exec_depend>
+  <exec_depend>microstrain_inertial_driver</exec_depend>
+  <exec_depend>micro_ros_agent</exec_depend>
+  <exec_depend>urg_node</exec_depend>
+  <exec_depend>velodyne_driver</exec_depend>
+  <exec_depend>velodyne_pointcloud</exec_depend>
+  <exec_depend>wireless_watcher</exec_depend>
+  <exec_depend>xacro</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

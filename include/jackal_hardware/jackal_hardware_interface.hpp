@@ -32,8 +32,8 @@
  *
  */
 
-#ifndef JACKAL_BASE_JACKAL_BASE_H
-#define JACKAL_BASE_JACKAL_BASE_H
+#ifndef JACKAL_HARDWARE_JACKAL_HARDWARE_INTERFACE_H
+#define JACKAL_HARDWARE_JACKAL_HARDWARE_INTERFACE_H
 
 #include <mutex>
 
@@ -42,7 +42,7 @@
 #include "jackal_msgs/msg/drive.hpp"
 #include "jackal_msgs/msg/feedback.hpp"
 
-namespace jackal_base
+namespace jackal_hardware
 {
 
 class JackalHardwareInterface
@@ -65,4 +65,4 @@ class JackalHardwareInterface
 
 }
 
-#endif  // JACKAL_BASE_JACKAL_BASE_H
+#endif  // JACKAL_HARDWARE_JACKAL_HARDWARE_INTERFACE_H

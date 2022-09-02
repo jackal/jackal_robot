@@ -32,16 +32,18 @@
  *
  */
 
-#include "jackal_base/jackal_hardware.hpp"
+#include "jackal_hardware/jackal_hardware.hpp"
 #include "jackal_msgs/msg/feedback.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 
-namespace jackal_base
+namespace jackal_hardware
 {
 
 static const std::string HW_NAME = "JackalHardware";
 static const std::string LEFT_CMD_JOINT_NAME = "front_left_wheel_joint";
 static const std::string RIGHT_CMD_JOINT_NAME = "front_right_wheel_joint";
+static const std::string LEFT_ALT_JOINT_NAME = "rear_left_wheel_joint";
+static const std::string RIGHT_ALT_JOINT_NAME = "rear_right_wheel_joint";
 
 /**
  * @brief Write commanded velocities to the MCU
@@ -49,8 +51,8 @@ static const std::string RIGHT_CMD_JOINT_NAME = "front_right_wheel_joint";
  */
 void JackalHardware::writeCommandsToHardware()
 {
-  double diff_speed_left = hw_commands_[left_cmd_joint_index_];
-  double diff_speed_right = hw_commands_[right_cmd_joint_index_];
+  double diff_speed_left = hw_commands_[wheel_joints_[LEFT_CMD_JOINT_NAME]];
+  double diff_speed_right = hw_commands_[wheel_joints_[RIGHT_CMD_JOINT_NAME]];
 
   if (std::abs(diff_speed_left) < 0.01 && std::abs(diff_speed_right) < 0.01) {
     diff_speed_left = diff_speed_right = 0.0;
@@ -76,8 +78,16 @@ void JackalHardware::updateJointsFromHardware()
     "Received linear distance information (L: %f, R: %f)",
     msg.drivers[0].measured_travel, msg.drivers[1].measured_travel);
 
+  auto side = jackal_msgs::msg::Drive::LEFT;
   for (auto i = 0u; i < hw_states_position_.size(); i++) {
-    double delta = msg.drivers[i].measured_travel -
+    if (i == wheel_joints_[RIGHT_ALT_JOINT_NAME] || i == wheel_joints_[RIGHT_CMD_JOINT_NAME]){
+      side = jackal_msgs::msg::Drive::RIGHT;
+    }
+    else {
+      side = jackal_msgs::msg::Drive::LEFT;
+    }
+
+    double delta = msg.drivers[side].measured_travel -
       hw_states_position_[i] - hw_states_position_offset_[i];
 
     // detect suspiciously large readings, possibly from encoder rollover
@@ -89,15 +99,9 @@ void JackalHardware::updateJointsFromHardware()
       RCLCPP_WARN(
         rclcpp::get_logger(HW_NAME), "Dropping overflow measurement from encoder");
     }
-  }
 
-  RCLCPP_DEBUG(
-    rclcpp::get_logger(HW_NAME),
-    "Received linear speed information (L: %f, R: %f)",
-    msg.drivers[0].measured_velocity, msg.drivers[1].measured_velocity);
-
-  for (auto i = 0u; i < hw_states_velocity_.size(); i++) {
-    hw_states_velocity_[i] = msg.drivers[i].measured_velocity;
+    // Velocities
+    hw_states_velocity_[i] = msg.drivers[side].measured_velocity;
   }
 }
 
@@ -191,14 +195,8 @@ std::vector<hardware_interface::CommandInterface> JackalHardware::export_command
       hardware_interface::CommandInterface(
         info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_commands_[i]));
 
-    // Detmerine which joints will be used for commands since Jackal only has two motors
-    if (info_.joints[i].name == LEFT_CMD_JOINT_NAME) {
-      left_cmd_joint_index_ = i;
-    }
-
-    if (info_.joints[i].name == RIGHT_CMD_JOINT_NAME) {
-      right_cmd_joint_index_ = i;
-    }
+    // Map wheel joint name to index
+    wheel_joints_[info_.joints[i].name] = i;
   }
 
   return command_interfaces;
@@ -258,8 +256,8 @@ hardware_interface::return_type JackalHardware::write()
   return hardware_interface::return_type::OK;
 }
 
-}  // namespace jackal_base
+}  // namespace jackal_hardware
 
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(
-  jackal_base::JackalHardware, hardware_interface::SystemInterface)
+  jackal_hardware::JackalHardware, hardware_interface::SystemInterface)
