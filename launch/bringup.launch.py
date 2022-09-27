@@ -62,6 +62,13 @@ def generate_launch_description():
             ))
         ),
 
+        # Diagnostics
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(PathJoinSubstitution(
+                [FindPackageShare('jackal_robot'), 'launch', 'diagnostics.launch.py']
+            ))
+        ),
+
         # Wireless Watcher
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(PathJoinSubstitution(
