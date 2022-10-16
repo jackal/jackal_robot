@@ -2,6 +2,33 @@
 Changelog for package jackal_robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fixed copyright
+  Added diagnostic dependencies
+* Ignore __pycache\_\_
+* Added jackal_diagnostics
+* Added install and uninstall scripts for robot_upstart job
+  Launch file cleanup
+* Added exec dependencies
+* Added accessories launch
+* Minor hardware fix
+* Consolidated jackal_base and jackal_bringup into one package 'jackal_robot'
+* Velocity mode when 0 velocity is commanded
+* Renamed JackalBase to JackalHardwareInterface
+  Reverted package version and description to current values
+  Use /dev/jackal as the micro ros serial device
+* Removed unused variables.
+  Updated copyright.
+* rclcpp::spin_some before checking for feedback
+* Mutex on feedback message
+* Working ros2_control
+* Add dependency for jackal_tests (`#54 <https://github.com/jackal/jackal_robot/issues/54>`_)
+  This PR should only be merged once the test package is released.
+* Add Blackfly to accessories launch
+* Added spinnaker_camera_driver to package.xml
+* Contributors: Joey Yang, Luis Camero, Roni Kreinin
+
 0.7.4 (2022-03-11)
 ------------------
 
