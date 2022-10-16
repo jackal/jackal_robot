@@ -2,8 +2,8 @@
 Changelog for package jackal_robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2022-10-16)
+------------------
 * Fixed copyright
   Added diagnostic dependencies
 * Ignore __pycache\_\_
