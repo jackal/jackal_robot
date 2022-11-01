@@ -1,0 +1,18 @@
+repositories:
+  jackal_robot:
+    type: git
+    url: https://github.com/jackal/jackal_robot.git
+    version: foxy-devel
+  jackal:
+    type: git
+    url: https://github.com/jackal/jackal.git
+    version: foxy-devel
+  wireless:
+    type: git
+    url: https://github.com/clearpathrobotics/wireless.git
+    version: foxy-devel
+  micro_ros_setup:
+    type: git
+    url: https://github.com/micro-ROS/micro_ros_setup.git
+    version: foxy
+
