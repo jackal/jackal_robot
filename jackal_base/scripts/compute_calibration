@@ -39,7 +39,7 @@ bag = rosbag.Bag(args.bag)
 
 vecs = []
 for topic, msg, time in bag.read_messages(topics=("/imu/mag",)):
-  vecs.append((float(msg.vector.x), float(msg.vector.y), float(msg.vector.z)))
+  vecs.append((float(msg.magnetic_field.x), float(msg.magnetic_field.y), float(msg.magnetic_field.z)))
 
 print ("Using " + str(len(vecs)) + " samples.")
 
