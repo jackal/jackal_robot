@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.5 (2022-11-17)
+------------------
 * Replace ros_mscl with microstrain_inertial_driver
 * Add Blackfly to accessories launch
 * Added spinnaker_camera_driver to package.xml

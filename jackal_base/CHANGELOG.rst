@@ -2,8 +2,8 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.5 (2022-11-17)
+------------------
 * use quiet_NaN for C++03 compatibility
 * Changed method JackalHardware::copyJointsFromHardware() so that the robot
   odomety resets to zero upon restart of the node.
