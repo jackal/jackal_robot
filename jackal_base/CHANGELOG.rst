@@ -2,6 +2,16 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use quiet_NaN for C++03 compatibility
+* Changed method JackalHardware::copyJointsFromHardware() so that the robot
+  odomety resets to zero upon restart of the node.
+  Previously, old state information would be retained, leading to
+  incorrect localization behavior.
+* Change sensor_msgs/MagneticField member to magnetic_field from vector
+* Contributors: Blake Anderson, Stijn Eijndhoven
+
 0.7.4 (2022-03-11)
 ------------------
 
