@@ -239,12 +239,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     <include file="$(find microstrain_inertial_driver)/launch/microstrain.launch">
       <arg name="namespace"              value="$(optenv JACKAL_IMU_MICROSTRAIN_NAME microstrain)" />
       <arg name="node_name"              value="microstrain_inertial_driver" />
-      <arg name="params_file"            value="" />
-      <arg name="port"                   value="$(optenv JACKAL_IMU_MICROSTRAIN_PORT /dev/microstrain)" />
-      <arg name="aux_port"               value="$(optenv JACKAL_IMU_MICROSTRAIN_PORT /dev/microstrain)" />
-      <arg name="baudrate"               value="$(optenv JACKAL_IMU_MICROSTRAIN_BAUDRATE 115200)" />
-      <arg name="imu_frame_id"           value="$(optenv JACKAL_IMU_MICROSTRAIN_LINK microstrain_link)" />
-      <arg name="use_enu_frame"          value="true" />
+      <arg name="params_file"            value="$(find jackal_bringup)/config/microstrain.yaml" />
     </include>
   </group>
 </launch>
