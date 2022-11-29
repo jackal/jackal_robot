@@ -2,6 +2,12 @@
 Changelog for package jackal_robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.7.5 (2022-11-17)
+------------------
+* Add dependency for jackal_tests (`#54 <https://github.com/jackal/jackal_robot/issues/54>`_)
+  This PR should only be merged once the test package is released.
+* Contributors: Joey Yang
+
 0.7.4 (2022-03-11)
 ------------------
 

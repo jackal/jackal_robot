@@ -34,6 +34,8 @@
 #include <boost/assign.hpp>
 #include "jackal_base/jackal_hardware.h"
 
+#include <cmath>
+
 namespace jackal_base
 {
 
@@ -72,10 +74,17 @@ void JackalHardware::copyJointsFromHardware()
   boost::mutex::scoped_lock feedback_msg_lock(feedback_msg_mutex_, boost::try_to_lock);
   if (feedback_msg_ && feedback_msg_lock)
   {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; ++i)
     {
-      joints_[i].position = feedback_msg_->drivers[i % 2].measured_travel;
-      joints_[i].velocity = feedback_msg_->drivers[i % 2].measured_velocity;
+      const int j = i % 2;
+
+      if (std::isnan(joints_[i].position_offset))
+      {
+        joints_[i].position_offset = feedback_msg_->drivers[j].measured_travel;
+      }
+
+      joints_[i].position = feedback_msg_->drivers[j].measured_travel - joints_[i].position_offset;
+      joints_[i].velocity = feedback_msg_->drivers[j].measured_velocity;
       joints_[i].effort = 0;  // TODO(mikepurvis): determine this from amperage data.
     }
   }
