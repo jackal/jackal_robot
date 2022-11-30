@@ -80,7 +80,6 @@ JackalDiagnosticUpdater::JackalDiagnosticUpdater()
   imu_sub_ = nh_.subscribe("/imu/data_raw", 5, &JackalDiagnosticUpdater::imuCallback, this);
 
   ros::param::param("~expected_navsat_frequency", expected_navsat_frequency_, 10.0);
-  ros::param::param<std::string>("~navsat_frequency_sentence", navsat_frequency_sentence_, "$GPRMC");
   navsat_diagnostic_ = new diagnostic_updater::TopicDiagnostic("/navsat/nmea_sentence", *this,
       diagnostic_updater::FrequencyStatusParam(&expected_navsat_frequency_, &expected_navsat_frequency_, 0.1),
       diagnostic_updater::TimeStampStatusParam(-1, 1.0));
@@ -237,9 +236,12 @@ void JackalDiagnosticUpdater::imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
 
 void JackalDiagnosticUpdater::navsatCallback(const nmea_msgs::Sentence::ConstPtr& msg)
 {
-  if (boost::starts_with(msg->sentence, navsat_frequency_sentence_))
+  for (std::string str: navsat_frequency_sentences_)
   {
-    navsat_diagnostic_->tick(msg->header.stamp);
+    if (boost::starts_with(msg->sentence, str))
+    {
+      navsat_diagnostic_->tick(msg->header.stamp);
+    }
   }
 }
 
