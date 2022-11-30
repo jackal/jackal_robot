@@ -74,7 +74,8 @@ private:
   ros::Subscriber imu_sub_;
 
   double expected_navsat_frequency_;
-  std::string navsat_frequency_sentence_;
+  // These are the NMEA values to look for to make sure the GPS is getting data.
+  const std::vector<std::string> navsat_frequency_sentences_ = {"$GPRMC", "$GNRMC"};
   diagnostic_updater::TopicDiagnostic* navsat_diagnostic_;
   ros::Subscriber navsat_sub_;
 
