@@ -2,6 +2,11 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Microstrain uses microstrain.yaml instead of deprecated ROS launch arguments.
+* Contributors: Joey Yang
+
 0.7.5 (2022-11-17)
 ------------------
 * Replace ros_mscl with microstrain_inertial_driver
