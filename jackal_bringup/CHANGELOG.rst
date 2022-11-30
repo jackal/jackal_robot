@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.6 (2022-11-29)
+------------------
 * Microstrain uses microstrain.yaml instead of deprecated ROS launch arguments.
 * Contributors: Joey Yang
 
