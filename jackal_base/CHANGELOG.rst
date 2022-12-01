@@ -2,6 +2,11 @@
 Changelog for package jackal_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [jackal_base] Added support for checking for $GNRMC in NMEA sentence and also removed ROS param for which sentence to look for.
+* Contributors: Tony Baltovski
+
 0.7.6 (2022-11-29)
 ------------------
 
