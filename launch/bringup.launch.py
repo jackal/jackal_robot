@@ -1,7 +1,7 @@
 from launch import LaunchDescription
-from launch.actions import GroupAction, IncludeLaunchDescription
+from launch.actions import ExecuteProcess, GroupAction, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import FindExecutable, PathJoinSubstitution
+from launch.substitutions import EnvironmentVariable, FindExecutable, PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -82,7 +82,20 @@ def generate_launch_description():
             package='micro_ros_agent',
             executable='micro_ros_agent',
             arguments=['serial', '--dev', '/dev/jackal'],
-            output='screen',
+            output='screen'),
+
+        # Set ROS_DOMAIN_ID
+        ExecuteProcess(
+            cmd=[
+                ['export ROS_DOMAIN_ID=0;'],
+                [FindExecutable(name='ros2'),
+                 ' service call /set_domain_id ',
+                 ' jackal_msgs/srv/SetDomainId ',
+                 '"domain_id: ',
+                 EnvironmentVariable('ROS_DOMAIN_ID', default_value='0'),
+                 '"']
+            ],
+            shell=True,
         ),
     ])
 
