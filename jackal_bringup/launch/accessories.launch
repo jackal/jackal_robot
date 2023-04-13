@@ -9,6 +9,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     Primary and secondary 2D lasers.  Model defined by JACKAL_LASER_MODEL and JACKAL_LASER_SECONDARY_MODEL.
     Valid models:
       - lms1xx (default)  :: SICK LMS1xx
+      - tim551            :: SICK TIM551
       - ust10             :: Hokuyo UST10
   -->
   <group if="$(optenv JACKAL_LASER 0)">
@@ -46,7 +47,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     </group>
     <group if="$(eval arg('lidar2_model') == 'tim551')">
       <node pkg="sick_tim" name="tim551_2" type="sick_tim551_2050001">
-        <param name="hostname" value="$(optenv JACKAL_LASER_SECONDARY_HOST 192.168.131.20)"/>
+        <param name="hostname" value="$(optenv JACKAL_LASER_SECONDARY_HOST 192.168.131.21)"/>
         <param name="frame_id" value="$(optenv JACKAL_LASER_SECONDARY_PREFIX tim551_2)"/>
         <remap from="scan" to="$(optenv JACKAL_LASER_SECONDARY_TOPIC rear/scan)" />
       </node>
