@@ -9,6 +9,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
     Primary and secondary 2D lasers.  Model defined by JACKAL_LASER_MODEL and JACKAL_LASER_SECONDARY_MODEL.
     Valid models:
       - lms1xx (default)  :: SICK LMS1xx
+      - tim551            :: SICK TIM551
       - ust10             :: Hokuyo UST10
   -->
   <group if="$(optenv JACKAL_LASER 0)">
