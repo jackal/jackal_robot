@@ -2,6 +2,12 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Updated valid laser model list for tim551
+* Fix secondary tim551 default hostname to secondary IP address
+* Contributors: Hilary Luo
+
 0.7.7 (2022-12-01)
 ------------------
 
