@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Extract logical names of all interfaces
+LOGICAL_NAME_LIST=$(sudo lshw -C network | grep "logical name")
+
+# Create array to store wireless interfaces
+declare -a INTERFACE_ARRAY
+
+ROW_NUM=0
+
+echo "Listing wireless interfaces..."
+
+# Iterate through and list all logical names of wireless interfaces
+while IFS= read -r LINE; 
+do
+	# Find all wireless interfaces
+	if [[ $LINE == *"logical name: w"* ]];
+	then
+		# Store each wireless interface's logical name in array
+		INTERFACE="$(echo $LINE | cut -d " " -f 3)"
+		INTERFACE_ARRAY+=("$INTERFACE")
+		((ROW_NUM++))
+		# List wireless interface
+		echo "$ROW_NUM. $INTERFACE"
+	fi
+done <<< $LOGICAL_NAME_LIST
+
+if [[ $ROW_NUM == 0 ]];
+then
+	echo "An error occured: No wireless interfaces found."
+	echo "Exiting..."
+	exit 1
+# If only one wireless interface found, automatically set JACKAL_WIRELESS_INTERFACE to it
+elif [[ $ROW_NUM == 1 ]];
+then
+	INDEX=$((ROW_NUM - 1))
+	INTERFACE="${INTERFACE_ARRAY[$INDEX]}"
+	echo "Found one wireless interface: $INTERFACE"
+	echo "Setting JACKAL_WIRELESS_INTERFACE to $INTERFACE in /etc/ros/setup.bash..."
+	sudo sed -i "/^#####.*/a export JACKAL_WIRELESS_INTERFACE=$INTERFACE" /etc/ros/setup.bash
+# If multiple wireless interfaces found, allow user to select which to set JACKAL_WIRELESS_INTERFACE to
+else
+	echo "Found multiple wireless interfaces"
+	read -p "Choose a wireless interface [#]: " ROW_NUM_USER
+
+	if [[ $ROW_NUM_USER -lt 1 ]] || [[ $ROW_NUM_USER -gt $ROW_NUM ]];
+	then
+		echo "An error occured: Invalid wireless interface number."
+		echo "Exiting..."
+		exit 1
+	else
+		INDEX=$((ROW_NUM_USER - 1))
+		INTERFACE="${INTERFACE_ARRAY[$INDEX]}"
+		echo "Setting JACKAL_WIRELESS_INTERFACE to $INTERFACE in /etc/ros/setup.bash..."
+		sudo sed -i "/^#####.*/a export JACKAL_WIRELESS_INTERFACE=$INTERFACE" /etc/ros/setup.bash
+	fi
+fi

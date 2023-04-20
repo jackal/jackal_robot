@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 
+from catkin.find_in_workspaces import find_in_workspaces
 import os
 import robot_upstart
+from subprocess import call
 
 j = robot_upstart.Job(workspace_setup=os.environ['ROBOT_SETUP'])
 j.add(package="jackal_base", filename="launch/base.launch")
 j.add(package="jackal_bringup", filename="launch/accessories.launch")
 j.install()
+
+### Set JACKAL_WIRELESS_INTERFACE automatically
+set_wireless_interface_path = find_in_workspaces(project="jackal_bringup", path="set-wireless-interface")[0]
+set_wireless_interface_cmd = "bash " + set_wireless_interface_path
+call(set_wireless_interface_cmd, shell=True)
