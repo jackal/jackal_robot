@@ -10,6 +10,6 @@ install(DIRECTORY launch config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(PROGRAMS scripts/install scripts/navsat_rtk_relay
+install(PROGRAMS scripts/install scripts/navsat_rtk_relay scripts/set-wireless-interface
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
