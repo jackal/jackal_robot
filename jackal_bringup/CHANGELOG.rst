@@ -2,6 +2,11 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [jackal_bringup] Added script to automatically set wireless interface.
+* Contributors: Tony Baltovski
+
 0.7.8 (2023-04-19)
 ------------------
 * Updated valid laser model list for tim551
