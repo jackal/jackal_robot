@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.9 (2023-04-21)
+------------------
 * [jackal_bringup] Added script to automatically set wireless interface.
 * Contributors: Tony Baltovski
 
