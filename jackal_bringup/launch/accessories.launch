@@ -89,7 +89,7 @@ in the URDF. See jackal_description/urdf/accessories.urdf.xacro.
         <remap from="scan" to="$(optenv JACKAL_FRONT_LASER_TOPIC front/scan)" />
       </node>
     </group>
-  </group>remap
+  </group>
   <group if="$(optenv JACKAL_REAR_ACCESSORY_FENDER 0)">
     <group if="$(optenv JACKAL_REAR_FENDER_UST10 0)">
       <node pkg="urg_node" name="rear_fender_hokuyo" type="urg_node">
