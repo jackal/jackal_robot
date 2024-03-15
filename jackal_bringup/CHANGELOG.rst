@@ -2,8 +2,8 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.10 (2024-03-15)
+-------------------
 * Removed typo
 * Moved remap out of the include tag
 * Contributors: Luis Camero
