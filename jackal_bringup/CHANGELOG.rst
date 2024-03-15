@@ -2,6 +2,12 @@
 Changelog for package jackal_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Removed typo
+* Moved remap out of the include tag
+* Contributors: Luis Camero
+
 0.7.9 (2023-04-21)
 ------------------
 * [jackal_bringup] Added script to automatically set wireless interface.
