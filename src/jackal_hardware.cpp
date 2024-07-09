@@ -33,7 +33,7 @@
  */
 
 #include "jackal_hardware/jackal_hardware.hpp"
-#include "jackal_msgs/msg/feedback.hpp"
+#include "clearpath_platform_msgs/msg/feedback.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 
 namespace jackal_hardware
@@ -61,7 +61,7 @@ void JackalHardware::writeCommandsToHardware()
   node_->drive_command(
     static_cast<float>(diff_speed_left),
     static_cast<float>(diff_speed_right),
-    jackal_msgs::msg::Drive::MODE_VELOCITY);
+    clearpath_platform_msgs::msg::Drive::MODE_VELOCITY);
 }
 
 /**
@@ -72,19 +72,19 @@ void JackalHardware::writeCommandsToHardware()
 void JackalHardware::updateJointsFromHardware()
 {
   rclcpp::spin_some(node_);
-  jackal_msgs::msg::Feedback msg = node_->get_feedback();
+  clearpath_platform_msgs::msg::Feedback msg = node_->get_feedback();
   RCLCPP_DEBUG(
     rclcpp::get_logger(HW_NAME),
     "Received linear distance information (L: %f, R: %f)",
     msg.drivers[0].measured_travel, msg.drivers[1].measured_travel);
 
-  auto side = jackal_msgs::msg::Drive::LEFT;
+  auto side = clearpath_platform_msgs::msg::Drive::LEFT;
   for (auto i = 0u; i < hw_states_position_.size(); i++) {
     if (i == wheel_joints_[RIGHT_ALT_JOINT_NAME] || i == wheel_joints_[RIGHT_CMD_JOINT_NAME]){
-      side = jackal_msgs::msg::Drive::RIGHT;
+      side = clearpath_platform_msgs::msg::Drive::RIGHT;
     }
     else {
-      side = jackal_msgs::msg::Drive::LEFT;
+      side = clearpath_platform_msgs::msg::Drive::LEFT;
     }
 
     double delta = msg.drivers[side].measured_travel -
@@ -105,16 +105,17 @@ void JackalHardware::updateJointsFromHardware()
   }
 }
 
-hardware_interface::return_type JackalHardware::configure(
+hardware_interface::CallbackReturn JackalHardware::on_init(
   const hardware_interface::HardwareInfo & info)
 {
-  if (configure_default(info) != hardware_interface::return_type::OK) {
-    return hardware_interface::return_type::ERROR;
+  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
+  {
+    return CallbackReturn::ERROR;
   }
 
   RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Name: %s", info_.name.c_str());
 
-  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Number of Joints %u", info_.joints.size());
+  RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Number of Joints %lu", info_.joints.size());
 
   hw_states_position_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_states_position_offset_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -128,9 +129,9 @@ hardware_interface::return_type JackalHardware::configure(
     if (joint.command_interfaces.size() != 1) {
       RCLCPP_FATAL(
         rclcpp::get_logger(HW_NAME),
-        "Joint '%s' has %d command interfaces found. 1 expected.", joint.name.c_str(),
+        "Joint '%s' has %ld command interfaces found. 1 expected.", joint.name.c_str(),
         joint.command_interfaces.size());
-      return hardware_interface::return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY) {
@@ -138,37 +139,35 @@ hardware_interface::return_type JackalHardware::configure(
         rclcpp::get_logger(HW_NAME),
         "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
         joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
-      return hardware_interface::return_type::ERROR;
+      return CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces.size() != 2) {
       RCLCPP_FATAL(
         rclcpp::get_logger(HW_NAME),
-        "Joint '%s' has %d state interface. 2 expected.", joint.name.c_str(),
-        joint.state_interfaces.size());
-      return hardware_interface::return_type::ERROR;
+        "Joint '%s' has %ld state interface. 2 expected.", joint.name.c_str(),
+          joint.state_interfaces.size());
+      return CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
       RCLCPP_FATAL(
         rclcpp::get_logger(HW_NAME),
-        "Joint '%s' have '%s' as first state interface. '%s' and '%s' expected.",
-        joint.name.c_str(), joint.state_interfaces[0].name.c_str(),
-        hardware_interface::HW_IF_POSITION);
-      return hardware_interface::return_type::ERROR;
+        "Joint '%s' have '%s' as first state interface. ",
+          joint.name.c_str(), joint.state_interfaces[0].name.c_str());
+      return CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY) {
       RCLCPP_FATAL(
         rclcpp::get_logger(HW_NAME),
-        "Joint '%s' have '%s' as second state interface. '%s' expected.", joint.name.c_str(),
-        joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_VELOCITY);
-      return hardware_interface::return_type::ERROR;
+        "Joint '%s' have '%s' as second state interface. .", joint.name.c_str(),
+        joint.state_interfaces[1].name.c_str());
+      return CallbackReturn::ERROR;
     }
   }
 
-  status_ = hardware_interface::status::CONFIGURED;
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface> JackalHardware::export_state_interfaces()
@@ -202,7 +201,7 @@ std::vector<hardware_interface::CommandInterface> JackalHardware::export_command
   return command_interfaces;
 }
 
-hardware_interface::return_type JackalHardware::start()
+hardware_interface::CallbackReturn JackalHardware::on_activate(const rclcpp_lifecycle::State & )
 {
   RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Starting ...please wait...");
 
@@ -216,25 +215,21 @@ hardware_interface::return_type JackalHardware::start()
     }
   }
 
-  status_ = hardware_interface::status::STARTED;
-
   RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "System Successfully started!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type JackalHardware::stop()
+hardware_interface::CallbackReturn JackalHardware::on_deactivate(const rclcpp_lifecycle::State & )
 {
   RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "Stopping ...please wait...");
 
-  status_ = hardware_interface::status::STOPPED;
-
   RCLCPP_INFO(rclcpp::get_logger(HW_NAME), "System successfully stopped!");
 
-  return hardware_interface::return_type::OK;
+  return CallbackReturn::SUCCESS;
 }
 
-hardware_interface::return_type JackalHardware::read()
+hardware_interface::return_type JackalHardware::read(const rclcpp::Time & , const rclcpp::Duration & )
 {
   RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Reading from hardware");
 
@@ -245,7 +240,7 @@ hardware_interface::return_type JackalHardware::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type JackalHardware::write()
+hardware_interface::return_type JackalHardware::write(const rclcpp::Time & , const rclcpp::Duration & )
 {
   RCLCPP_DEBUG(rclcpp::get_logger(HW_NAME), "Writing to hardware");
 

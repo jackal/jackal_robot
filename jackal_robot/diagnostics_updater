@@ -40,7 +40,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 
-from jackal_msgs.msg import Status, StopStatus, Power, Feedback
+from clearpath_platform_msgs.msg import Status, StopStatus, Power, Feedback
 
 from nmea_msgs.msg import Sentence
 

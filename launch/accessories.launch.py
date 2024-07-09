@@ -4,6 +4,9 @@ from launch import LaunchContext, LaunchDescription
 from launch.substitutions import EnvironmentVariable, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import PathJoinSubstitution
 
 
 def generate_launch_description():
@@ -31,6 +34,18 @@ def generate_launch_description():
                 ]
             )
             ld.add_action(node_hokuyo)
+        elif (primary_lidar_model.perform(lc) == 'femto_mega'):
+            femto_mega = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    PathJoinSubstitution(
+                        [FindPackageShare('orbbec_camera'),
+                        'launch',
+                        'femto_mega.launch.py']
+                    )
+                )
+            )
+
+            ld.add_action(femto_mega)
 
 
     # Secondary Lidar Environment Variables

@@ -22,7 +22,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 
 find_package(geometry_msgs REQUIRED)
-find_package(jackal_msgs REQUIRED)
+find_package(clearpath_platform_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
@@ -47,7 +47,7 @@ target_include_directories(
 
 ament_target_dependencies(
   jackal_hardware
-  jackal_msgs
+  clearpath_platform_msgs
   hardware_interface
   pluginlib
   rclcpp
