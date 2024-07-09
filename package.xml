@@ -17,7 +17,7 @@
   <depend>diagnostic_updater</depend>
   <depend>hardware_interface</depend>
   <depend>geometry_msgs</depend>
-  <depend>jackal_msgs</depend>
+  <depend>clearpath_platform_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>

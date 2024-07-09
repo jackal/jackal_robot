@@ -39,8 +39,8 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include "jackal_msgs/msg/drive.hpp"
-#include "jackal_msgs/msg/feedback.hpp"
+#include "clearpath_platform_msgs/msg/drive.hpp"
+#include "clearpath_platform_msgs/msg/feedback.hpp"
 
 namespace jackal_hardware
 {
@@ -51,15 +51,15 @@ class JackalHardwareInterface
   public:
   explicit JackalHardwareInterface();
   void drive_command(float left_wheel, float right_wheel, int8_t mode);
-  jackal_msgs::msg::Feedback get_feedback();
+  clearpath_platform_msgs::msg::Feedback get_feedback();
 
   private:
-  void feedback_callback(const jackal_msgs::msg::Feedback::SharedPtr msg);
+  void feedback_callback(const clearpath_platform_msgs::msg::Feedback::SharedPtr msg);
 
-  rclcpp::Publisher<jackal_msgs::msg::Drive>::SharedPtr drive_pub_;
-  rclcpp::Subscription<jackal_msgs::msg::Feedback>::SharedPtr feedback_sub_;
+  rclcpp::Publisher<clearpath_platform_msgs::msg::Drive>::SharedPtr drive_pub_;
+  rclcpp::Subscription<clearpath_platform_msgs::msg::Feedback>::SharedPtr feedback_sub_;
 
-  jackal_msgs::msg::Feedback feedback_;
+  clearpath_platform_msgs::msg::Feedback feedback_;
   std::mutex feedback_mutex_;
 };
 

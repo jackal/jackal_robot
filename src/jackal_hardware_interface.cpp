@@ -43,13 +43,13 @@ using jackal_hardware::JackalHardwareInterface;
 JackalHardwareInterface::JackalHardwareInterface()
 : Node("jackal_hardware")
 {
-  feedback_sub_ = create_subscription<jackal_msgs::msg::Feedback>(
+  feedback_sub_ = create_subscription<clearpath_platform_msgs::msg::Feedback>(
     "feedback",
     rclcpp::SensorDataQoS(),
     std::bind(&JackalHardwareInterface::feedback_callback, this, std::placeholders::_1));
 
-  drive_pub_ = create_publisher<jackal_msgs::msg::Drive>(
-    "cmd_drive",
+  drive_pub_ = create_publisher<clearpath_platform_msgs::msg::Drive>(
+    "/platform/motors/cmd_drive",
     rclcpp::SensorDataQoS());
 }
 
@@ -58,7 +58,7 @@ JackalHardwareInterface::JackalHardwareInterface()
  * 
  * @param msg 
  */
-void JackalHardwareInterface::feedback_callback(const jackal_msgs::msg::Feedback::SharedPtr msg)
+void JackalHardwareInterface::feedback_callback(const clearpath_platform_msgs::msg::Feedback::SharedPtr msg)
 {
   std::lock_guard<std::mutex> guard(feedback_mutex_);
   feedback_ = *msg;
@@ -73,21 +73,21 @@ void JackalHardwareInterface::feedback_callback(const jackal_msgs::msg::Feedback
  */
 void JackalHardwareInterface::drive_command(float left_wheel, float right_wheel, int8_t mode)
 {
-  jackal_msgs::msg::Drive drive_msg;
+  clearpath_platform_msgs::msg::Drive drive_msg;
   drive_msg.mode = mode;
-  drive_msg.drivers[jackal_msgs::msg::Drive::LEFT] = left_wheel;
-  drive_msg.drivers[jackal_msgs::msg::Drive::RIGHT] = right_wheel;
+  drive_msg.drivers[clearpath_platform_msgs::msg::Drive::LEFT] = left_wheel;
+  drive_msg.drivers[clearpath_platform_msgs::msg::Drive::RIGHT] = right_wheel;
   drive_pub_->publish(drive_msg);
 }
 
 /**
  * @brief Get latest feedback message
  * 
- * @return jackal_msgs::msg::Feedback message 
+ * @return clearpath_platform_msgs::msg::Feedback message 
  */
-jackal_msgs::msg::Feedback JackalHardwareInterface::get_feedback()
+clearpath_platform_msgs::msg::Feedback JackalHardwareInterface::get_feedback()
 {
-  jackal_msgs::msg::Feedback msg;
+  clearpath_platform_msgs::msg::Feedback msg;
 
   {
     std::lock_guard<std::mutex> guard(feedback_mutex_);
